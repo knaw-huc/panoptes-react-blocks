@@ -1,4 +1,3 @@
-// Block renderers
 export { default as ExternalLinkBlockRenderer } from './components/blocks/external-link';
 export type { ExternalLinkBlock } from './components/blocks/external-link';
 
@@ -17,7 +16,7 @@ export type { MapBlock, MapBlockConfig, MapBlockValue } from './components/block
 export { default as MarkdownBlockRenderer } from './components/blocks/markdown';
 export type { MarkDownBlock } from './components/blocks/markdown';
 
-export { default as RenderScreenBlock } from './components/blocks/screen';
+export { default as ScreenBlockRenderer } from './components/blocks/screen';
 export { ScreenProvider } from './components/blocks/screen/context/ScreenContext';
 export type { ScreenProviderProps } from './components/blocks/screen/context/ScreenContext';
 
