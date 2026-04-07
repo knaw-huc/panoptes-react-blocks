@@ -24,7 +24,8 @@
   ],
   "scripts": {
     "build": "tsc -b && vite build",
-    "dev": "vite build --watch"
+    "dev": "vite",
+    "build:watch": "vite build --watch"
   },
   "peerDependencies": {
     "@knaw-huc/panoptes-react": "*",

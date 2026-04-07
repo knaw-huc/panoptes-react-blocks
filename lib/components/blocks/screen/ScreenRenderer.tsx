@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import ScreenTabs from './ScreenTabs';
 import ScreenForm from './ScreenForm';
 import ScreenActions from './ScreenActions';

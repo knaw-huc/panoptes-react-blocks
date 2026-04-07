@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import * as LucideIcons from 'lucide-react';
 import type {LucideProps} from 'lucide-react';
 import type {SidebarDefinition, SidebarNavItemDefinition} from './schema';

@@ -3,17 +3,17 @@ import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import { resolve } from 'path';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
     plugins: [
         react(),
-        dts({
-            include: ['src'],
+        ...(command === 'build' ? [dts({
+            include: ['lib'],
             insertTypesEntry: true,
-        }),
+        })] : []),
     ],
     build: {
         lib: {
-            entry: resolve(__dirname, 'src/index.ts'),
+            entry: resolve(__dirname, 'lib/index.ts'),
             name: 'KnawHucBlocks',
             formats: ['es', 'cjs'],
             fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
@@ -38,4 +38,4 @@ export default defineConfig({
         },
         cssCodeSplit: false,
     },
-});
+}));
