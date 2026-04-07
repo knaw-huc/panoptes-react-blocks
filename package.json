@@ -1,5 +1,5 @@
 {
-  "name": "@knaw-huc/blocks",
+  "name": "@knaw-huc/panoptes-react-blocks",
   "version": "0.0.1",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -28,8 +28,8 @@
   "peerDependencies": {
     "@knaw-huc/panoptes-react": "*",
     "@tanstack/react-router": "*",
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "19",
+    "react-dom": "19"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

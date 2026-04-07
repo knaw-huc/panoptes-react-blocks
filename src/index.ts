@@ -2,7 +2,7 @@
 export { default as ExternalLinkBlockRenderer } from './components/blocks/external-link';
 export type { ExternalLinkBlock } from './components/blocks/external-link';
 
-export { default as RenderJsonBlock } from './components/blocks/json';
+export { default as JsonBlockRenderer } from './components/blocks/json';
 export type { JsonBlock, JsonData, JsonSchema, JsonValue, JsonObject, JsonArray, JsonPrimitive } from './components/blocks/json';
 
 export { default as LabelBlockRenderer } from './components/blocks/label';
