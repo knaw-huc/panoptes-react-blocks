@@ -125,7 +125,7 @@ interface ScreenBlock extends Block {
 
 ## Screen system
 
-The screen block system (`src/components/blocks/screen/`) renders structured detail screens driven by a declarative JSON configuration from the Panoptes API. A screen block is registered as a Panoptes block of type `"screen"` and can be used anywhere the framework renders blocks.
+The screen block system (`lib/components/blocks/screen/`) renders structured detail screens driven by a declarative JSON configuration from the Panoptes API. A screen block is registered as a Panoptes block of type `"screen"` and can be used anywhere the framework renders blocks.
 
 ### Architecture overview
 
@@ -647,11 +647,20 @@ import { GhostLine } from '@knaw-huc/panoptes-react-blocks';
 <GhostLine />
 ```
 
+## Repository structure
+
+| Path | Purpose |
+|---|---|
+| `lib/` | Library source — compiled and published as `@knaw-huc/panoptes-react-blocks` |
+| `src/` | Example show app for local development and visual testing |
+
+Run the example app with `npm run dev` to preview components in the browser.
+
 ## Building
 
 ```bash
 npm run build   # compile once
-npm run dev     # watch mode
+npm run dev     # watch mode (starts the example app)
 ```
 
 Output is written to `dist/` as ES module (`index.js`) and CommonJS (`index.cjs`) bundles, with a bundled `style.css`.
