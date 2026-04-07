@@ -1,4 +1,4 @@
-# @knaw-huc/panoptes-react-blocks (Heavily WIP still!)
+# @knaw-huc/panoptes-react-blocks (WIP)
 
 A React component library providing block renderers and a screen layout system for [Panoptes](https://github.com/knaw-huc/panoptes-react) applications.
 
