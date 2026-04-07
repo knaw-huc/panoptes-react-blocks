@@ -16,7 +16,7 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/panoptes-react-blocks.css"
   },
   "files": [
     "dist"
