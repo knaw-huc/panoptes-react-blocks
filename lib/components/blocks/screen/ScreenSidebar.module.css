@@ -60,11 +60,6 @@
     }
 }
 
-.iconFallback {
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
 .tooltip {
     position: absolute;
     left: calc(100% + 0.5rem);

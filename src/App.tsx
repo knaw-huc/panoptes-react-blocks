@@ -53,7 +53,7 @@ export default function App() {
     return (
         <Panoptes configuration={{}}>
             <div style={{ fontFamily: 'sans-serif', maxWidth: 800, margin: '2rem auto', padding: '0 1rem' }}>
-                <h1 style={{ borderBottom: '1px solid #ccc', paddingBottom: '0.5rem' }}>Blocks — Example App</h1>
+                <h1>Panoptes-React-Blocks — Examples</h1>
                 {sections.map(({ title, element }) => (
                     <section key={title} style={{ marginBottom: '2rem' }}>
                         <h2 style={{ fontSize: '1rem', color: '#555', marginBottom: '0.5rem' }}>{title}</h2>

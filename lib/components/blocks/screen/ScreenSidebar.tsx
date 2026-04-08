@@ -1,6 +1,3 @@
-import type React from 'react';
-import * as LucideIcons from 'lucide-react';
-import type {LucideProps} from 'lucide-react';
 import type {SidebarDefinition, SidebarNavItemDefinition} from './schema';
 import styles from './ScreenSidebar.module.css';
 import {usePanoptes} from "@knaw-huc/panoptes-react";
@@ -8,15 +5,6 @@ import useScreenContext from "./hooks/useScreenContext.ts";
 
 interface ScreenSidebarProps {
     sidebar: SidebarDefinition;
-}
-
-function NavIcon({ name }: { name: string }) {
-    const pascal = name.charAt(0).toUpperCase() + name.slice(1).replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-    const Icon = (LucideIcons as unknown as Record<string, React.ComponentType<LucideProps>>)[pascal];
-    if (!Icon) {
-        return <span className={styles.iconFallback}>{name.charAt(0).toUpperCase()}</span>;
-    }
-    return <Icon size={20} strokeWidth={1.5} />;
 }
 
 function NavItem({ item, screenId, sectionId }: { item: SidebarNavItemDefinition; screenId: string; sectionId: string }) {
@@ -28,9 +16,10 @@ function NavItem({ item, screenId, sectionId }: { item: SidebarNavItemDefinition
 
     const className = `${styles.item}${item.active ? ` ${styles.itemActive}` : ''}`;
 
+    // TODO - use icons or something similar
     return (
         <button type="button" className={className} title={label}>
-            <NavIcon name={item.icon} />
+            X
             <span className={styles.tooltip}>{label}</span>
         </button>
     );

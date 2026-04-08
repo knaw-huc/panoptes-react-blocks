@@ -37,7 +37,7 @@ function ActionButton({ action }: ActionButtonProps) {
     const executeAction = useCallback(async () => {
         setIsExecuting(true);
         try {
-            // TODO: Execute operation via eg. useOperation hook
+            // TODO: Execute operation
             console.log('Executing operation:', action.operation, 'with data:', data);
         } finally {
             setIsExecuting(false);
