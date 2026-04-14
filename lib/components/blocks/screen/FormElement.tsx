@@ -1,4 +1,4 @@
-import {Suspense} from "react";
+import React, {Suspense} from "react";
 import type {ElementDefinition} from "./schema";
 import {type Block, useBlock, usePanoptes} from "@knaw-huc/panoptes-react";
 import {useElementState, useScreenContext} from "./hooks";
@@ -115,6 +115,10 @@ const renderValue = (type: string, value: unknown,
     }
 }
 
+const BlockWrapper = ({ Component, block }: { Component: React.ComponentType<{ block: Block }>, block: Block }) => (
+    <Component block={block} />
+);
+
 const ConfiguredBlockRenderer = ({ element, groupId }: {
     element: ElementDefinition;
     groupId?: string;
@@ -142,7 +146,7 @@ const ConfiguredBlockRenderer = ({ element, groupId }: {
                 </label>
             )}
             <Suspense fallback={<GhostLine/>}>
-                <BlockComponent block={block} />
+                <BlockWrapper Component={BlockComponent} block={block} />
             </Suspense>
             {infoLabel && (
                 <span className={styles.info}>
