@@ -1,4 +1,4 @@
-import React, {Suspense} from "react";
+import {Suspense} from "react";
 import type {ElementDefinition} from "./schema";
 import {type Block, useBlock, usePanoptes} from "@knaw-huc/panoptes-react";
 import {useElementState, useScreenContext} from "./hooks";
