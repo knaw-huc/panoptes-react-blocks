@@ -13,7 +13,7 @@ export interface LinkBlock extends Block {
     model?: Record<string, unknown>;
 }
 
-export default function LinkBlockRenderer({block}: { block: Block }) {
+export default function LinkBlockRenderer({block}: { block: LinkBlock }) {
 
     const router = useRouter();
     const { value, config, model } = block as LinkBlock;

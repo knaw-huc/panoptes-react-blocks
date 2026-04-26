@@ -3,14 +3,12 @@ import { createRoot } from 'react-dom/client';
 import {Panoptes} from "@knaw-huc/panoptes-react";
 import {
     ExternalLinkBlockRenderer,
-    JsonBlockRenderer,
     LabelBlockRenderer,
-    LinkBlockRenderer,
-    MapBlockRenderer,
     MarkdownBlockRenderer,
-    ScreenBlockRenderer,
+    JsonBlockRenderer,
+    ToggleBlockRenderer,
     type ScreenDefinition,
-    ToggleBlockRenderer
+    panoptesBlocksLibrary
 } from "../lib";
 import RenderScreenBlock from "../lib/components/blocks/screen";
 import "./i18n/i18n.ts";
@@ -241,22 +239,13 @@ const sections: { title: string; element: React.ReactNode }[] = [
         element: (
             <RenderScreenBlock block={{ type: 'screen', value: exampleScreenData, config: exampleScreenDefinition }} />
         ),
-    },
+    }
 ];
 
 function App() {
     return (
         <Panoptes configuration={{
-            blocks: new Map([
-                ["json", JsonBlockRenderer],
-                ["link", LinkBlockRenderer],
-                ["external-link", ExternalLinkBlockRenderer],
-                ["markdown", MarkdownBlockRenderer],
-                ["toggle", ToggleBlockRenderer],
-                ["screen", ScreenBlockRenderer],
-                ["label", LabelBlockRenderer],
-                ["map", MapBlockRenderer]
-            ]),
+            blocks: panoptesBlocksLibrary,
             translateFn: createTranslate()
         }}>
             <div style={{ fontFamily: 'sans-serif', margin: '2rem auto', padding: '0 1rem' }}>
