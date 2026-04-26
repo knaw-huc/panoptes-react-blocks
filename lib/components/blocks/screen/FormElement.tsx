@@ -115,6 +115,10 @@ const renderValue = (type: string, value: unknown,
     }
 }
 
+const BlockWrapper = ({ Component, block }: { Component: React.ComponentType<{ block: Block }>, block: Block }) => (
+    <Component block={block} />
+);
+
 const ConfiguredBlockRenderer = ({ element, groupId }: {
     element: ElementDefinition;
     groupId?: string;
@@ -142,7 +146,7 @@ const ConfiguredBlockRenderer = ({ element, groupId }: {
                 </label>
             )}
             <Suspense fallback={<GhostLine/>}>
-                <BlockComponent block={block} />
+                <BlockWrapper Component={BlockComponent} block={block} />
             </Suspense>
             {infoLabel && (
                 <span className={styles.info}>
