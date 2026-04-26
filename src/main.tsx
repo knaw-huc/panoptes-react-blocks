@@ -229,6 +229,14 @@ const sections: { title: string; element: React.ReactNode }[] = [
         ),
     },
     {
+        title: 'ExternalLinkBlockRenderer',
+        element: (
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                <ExternalLinkBlockRenderer block={{ type: 'external-link', value: 'http://www.google.com' }} />
+            </div>
+        ),
+    },
+    {
         title: 'ScreenBlockRenderer',
         element: (
             <RenderScreenBlock block={{ type: 'screen', value: exampleScreenData, config: exampleScreenDefinition }} />

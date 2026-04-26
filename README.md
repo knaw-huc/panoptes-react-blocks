@@ -33,7 +33,7 @@ Renders a `value` string as an external anchor (`target="_blank"`).
 
 ```ts
 interface ExternalLinkBlock extends Block {
-    type: 'link';
+    type: 'external-link';
     value: string; // URL
 }
 ```

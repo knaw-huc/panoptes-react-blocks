@@ -2,7 +2,7 @@ import type {Block} from "@knaw-huc/panoptes-react";
 import classes from "../Blocks.module.css";
 
 export interface ExternalLinkBlock extends Block {
-    type: 'link';
+    type: 'external-link';
     value: string;
 }
 
