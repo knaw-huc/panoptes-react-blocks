@@ -84,9 +84,11 @@ const renderValue = (type: string, value: unknown,
             );
 
         case 'array':
+            let val = Array.isArray(value) ? value : [value];
+
             return (
                 <ArrayDisplay
-                    value={value as unknown[]}
+                    value={val as unknown[]}
                     element={element}
                 />
             );
