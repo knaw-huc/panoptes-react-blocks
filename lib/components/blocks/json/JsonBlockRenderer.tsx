@@ -11,7 +11,7 @@ import classes from "./JsonBlockRenderer.module.css";
 
 const isJsonBlock = (block: JsonBlock) => block.type === "json";
 
-/** humanize "some_keyName" -> "Some key name" */
+/* Humanize "some_keyName" -> "Some key name" */
 const humanizeLabel = (label: string) =>
     label
         .replace(/_/g, " ")
@@ -63,6 +63,10 @@ const Primitive = ({ value }: { value: JsonValue }) => {
     }
 };
 
+const BlockWrapper = ({ Component, block }: { Component: React.ComponentType<{ block: Block }>, block: Block }) => (
+    <Component block={block} />
+);
+
 /** Renders a configured block - may throw if block type not found */
 const ConfiguredBlockRenderer = ({
     config,
@@ -82,7 +86,7 @@ const ConfiguredBlockRenderer = ({
     const block = { ...config, value, model };
     return (
         <Suspense fallback={<GhostLine/>}>
-            <BlockComponent block={block} />
+            <BlockWrapper Component={BlockComponent} block={block} />
         </Suspense>
     );
 };

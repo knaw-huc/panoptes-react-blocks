@@ -1,13 +1,17 @@
 import type {JsonSchema} from "./index.tsx";
 
-export function deepGet(obj: any, path: string, defaultValue?: any): any {
+export function deepGet(obj: Record<string, unknown> | null | undefined,
+                        path: string,
+                        defaultValue?: unknown): unknown {
     const segments = path.split('.');
-    const result = segments.reduce((current, key) => current && current[key], obj);
+    const result = segments.reduce<Record<string, unknown> | unknown>(
+        (current, key) => current != null && typeof current === 'object' ?
+                    (current as Record<string, unknown>)[key] : undefined, obj);
     return result === undefined ? defaultValue : result;
 }
 
 export const omitProperty = (schema: JsonSchema, propertyName: string): boolean => {
-    return deepGet(schema, `${propertyName}.hidden`, false);
+    return deepGet(schema, `${propertyName}.hidden`, false) as boolean;
 }
 
 export const isLink = (schema: JsonSchema, propertyName: string): boolean => {
@@ -23,5 +27,5 @@ export const isMarkdownHTML = (schema: JsonSchema, propertyName: string): boolea
 }
 
 export const getLinkTo = (schema: JsonSchema, propertyName: string): string => {
-    return deepGet(schema, `${propertyName}.url`, '');
+    return deepGet(schema, `${propertyName}.url`, '') as string;
 }

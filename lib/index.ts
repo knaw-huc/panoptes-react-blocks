@@ -1,3 +1,14 @@
+import React from "react";
+import type {Block} from "@knaw-huc/panoptes-react";
+import ExternalLinkBlockRenderer from './components/blocks/external-link';
+import JsonBlockRenderer from './components/blocks/json';
+import LabelBlockRenderer from './components/blocks/label';
+import LinkBlockRenderer from './components/blocks/link';
+import MapBlockRenderer from './components/blocks/map';
+import MarkdownBlockRenderer from './components/blocks/markdown';
+import ScreenBlockRenderer from './components/blocks/screen';
+import ToggleBlockRenderer from './components/blocks/toggle';
+
 export { default as ExternalLinkBlockRenderer } from './components/blocks/external-link';
 export type { ExternalLinkBlock } from './components/blocks/external-link';
 
@@ -54,5 +65,15 @@ export {
     getNestedValue,
 } from './components/blocks/screen/schema';
 
-// Ghostline
 export { default as GhostLine } from './components/ghostline/Ghostline';
+
+export const panoptesBlocksLibrary = new Map([
+    ['external-link', ExternalLinkBlockRenderer],
+    ['json', JsonBlockRenderer],
+    ['label', LabelBlockRenderer],
+    ['link', LinkBlockRenderer],
+    ['map', MapBlockRenderer],
+    ['markdown', MarkdownBlockRenderer],
+    ['screen', ScreenBlockRenderer],
+    ['toggle', ToggleBlockRenderer],
+]) as Map<string, React.FC<{ block: Block }>>;

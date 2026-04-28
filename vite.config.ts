@@ -4,6 +4,11 @@ import dts from 'vite-plugin-dts';
 import { resolve } from 'path';
 
 export default defineConfig(({ command }) => ({
+    test: {
+        environment: 'jsdom',
+        globals: true,
+        setupFiles: ['./vitest.setup.ts'],
+    },
     plugins: [
         react(),
         ...(command === 'build' ? [dts({
