@@ -4,10 +4,14 @@ import {getNestedValue, isBindingExpression, parseBinding} from "../schema";
 import {useItemData} from "./useItemData.ts";
 import useScreenContext from "./useScreenContext.ts";
 
+function sanitizeKeySegment(segment: string): string {
+    return segment.replace(/[:\s]/g, '_');
+}
+
 function buildLabelKey(screenId: string, groupId: string | undefined, path: string[]): string {
     const parts = ['screens', screenId];
     if (groupId) parts.push(groupId);
-    parts.push(...path);
+    parts.push(...path.map(sanitizeKeySegment));
     return parts.join('.');
 }
 

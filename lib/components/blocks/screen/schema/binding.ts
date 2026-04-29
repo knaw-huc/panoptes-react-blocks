@@ -11,17 +11,25 @@ export function isBindingExpression(value: string): boolean {
     return BINDING_REGEX.test(value) || ITEM_BINDING_REGEX.test(value);
 }
 
+function unescapePointerSegment(segment: string): string {
+    return segment.replace(/~1/g, '/').replace(/~0/g, '~');
+}
+
+function splitPointer(rawPath: string): string[] {
+    return rawPath.split('/').map(unescapePointerSegment);
+}
+
 export function parseBinding(expression: string): ParsedBinding {
     const dataMatch = expression.match(BINDING_REGEX);
     if (dataMatch) {
         const rawPath = dataMatch[1];
-        return { source: 'data', path: rawPath.split('/'), rawPath };
+        return { source: 'data', path: splitPointer(rawPath), rawPath };
     }
 
     const itemMatch = expression.match(ITEM_BINDING_REGEX);
     if (itemMatch) {
         const rawPath = itemMatch[1];
-        return { source: 'itemData', path: rawPath.split('/'), rawPath };
+        return { source: 'itemData', path: splitPointer(rawPath), rawPath };
     }
 
     throw new Error(`Invalid binding expression: ${expression}. Expected format: $data#/path or $itemData#/path`);

@@ -272,7 +272,7 @@ Element `value` fields and `itemTemplate` field values use binding expressions t
 | `$data#/field/subfield` | The `value` object of the `ScreenBlock` |
 | `$itemData#/field` | The current item object when rendering inside an `array` element |
 
-Path segments are separated by `/`.
+Path segments are separated by `/` and follow [JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901) escaping rules: within a segment, `~1` decodes to `/` and `~0` decodes to `~`. This lets bindings target keys that themselves contain slashes or tildes — e.g. `$itemData#/metadata/Caption~1Abstract` resolves the key `Caption/Abstract` under `metadata`.
 
 The `value` field on an `ElementDefinition` supports three forms:
 
@@ -317,7 +317,7 @@ All `label` (and `infoLabel`) fields are optional. When omitted, a translation k
 | Action confirmation ok | `screens.{screenId}.actions.{actionId}.ok` | `screens.journal-detail.actions.save.ok` |
 | Action confirmation cancel | `screens.{screenId}.actions.{actionId}.cancel` | `screens.journal-detail.actions.save.cancel` |
 
-The `{field}` segment is the path from the binding expression — e.g. `$data#/title` produces `title`, and `$data#/address/city` produces `address.city`.
+The `{field}` segment is the path from the binding expression — e.g. `$data#/title` produces `title`, and `$data#/address/city` produces `address.city`. Characters within a path segment that would conflict with the dot-separated key format — colons (`:`) and whitespace — are replaced with `_` when building the autokey, so a binding such as `$data#/dc:title` produces the autokey segment `dc_title`.
 
 When a `label` is provided explicitly it is used as-is (also passed through `translateFn`), which allows overriding the autokey with a custom translation key or a literal string.
 
