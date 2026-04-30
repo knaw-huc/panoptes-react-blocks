@@ -1,52 +1,43 @@
+import { JSONPath } from 'jsonpath-plus';
+
 export interface ParsedBinding {
     source: 'data' | 'itemData';
-    path: string[];
-    rawPath: string;
+    path: string;
+    expression: string;
 }
 
-const BINDING_REGEX = /^\$data#\/(.+)$/;
-const ITEM_BINDING_REGEX = /^\$itemData#\/(.+)$/;
+const BINDING_REGEX = /^\$(data|itemData)#(\$.*)$/;
 
-export function isBindingExpression(value: string): boolean {
-    return BINDING_REGEX.test(value) || ITEM_BINDING_REGEX.test(value);
-}
-
-function unescapePointerSegment(segment: string): string {
-    return segment.replace(/~1/g, '/').replace(/~0/g, '~');
-}
-
-function splitPointer(rawPath: string): string[] {
-    return rawPath.split('/').map(unescapePointerSegment);
+export function isBindingExpression(value: unknown): boolean {
+    return typeof value === 'string' && BINDING_REGEX.test(value);
 }
 
 export function parseBinding(expression: string): ParsedBinding {
-    const dataMatch = expression.match(BINDING_REGEX);
-    if (dataMatch) {
-        const rawPath = dataMatch[1];
-        return { source: 'data', path: splitPointer(rawPath), rawPath };
+    const match = expression.match(BINDING_REGEX);
+    if (!match) {
+        throw new Error(
+            `Invalid binding expression: ${expression}. Expected format: $data#$.<jsonpath> or $itemData#$.<jsonpath>`,
+        );
     }
-
-    const itemMatch = expression.match(ITEM_BINDING_REGEX);
-    if (itemMatch) {
-        const rawPath = itemMatch[1];
-        return { source: 'itemData', path: splitPointer(rawPath), rawPath };
-    }
-
-    throw new Error(`Invalid binding expression: ${expression}. Expected format: $data#/path or $itemData#/path`);
+    return {
+        source: match[1] as 'data' | 'itemData',
+        path: match[2],
+        expression,
+    };
 }
 
-export function getNestedValue(obj: unknown, path: string[]): unknown {
-    let current: unknown = obj;
-
-    for (const key of path) {
-        if (current === null || current === undefined) {
-            return undefined;
-        }
-        if (typeof current !== 'object') {
-            return undefined;
-        }
-        current = (current as Record<string, unknown>)[key];
+export function resolveBinding(data: unknown, path: string): unknown {
+    if (data === null || data === undefined) {
+        return undefined;
     }
+    return JSONPath({ path, json: data as object, wrap: false });
+}
 
-    return current;
+export function bindingPathSegments(path: string): string[] {
+    try {
+        const arr = JSONPath.toPathArray(path) as string[];
+        return arr.slice(1);
+    } catch {
+        return [];
+    }
 }

@@ -24,21 +24,21 @@ describe('useScreenState', () => {
         const { result } = renderHook(() => useScreenState(), {
             wrapper: makeWrapper({ name: 'Alice' }),
         });
-        expect(result.current.getValue('$data#/name')).toBe('Alice');
+        expect(result.current.getValue('$data#$.name')).toBe('Alice');
     });
 
     it('resolves a nested $data binding', () => {
         const { result } = renderHook(() => useScreenState(), {
             wrapper: makeWrapper({ user: { city: 'Amsterdam' } }),
         });
-        expect(result.current.getValue('$data#/user/city')).toBe('Amsterdam');
+        expect(result.current.getValue('$data#$.user.city')).toBe('Amsterdam');
     });
 
     it('returns undefined for a missing path', () => {
         const { result } = renderHook(() => useScreenState(), {
             wrapper: makeWrapper({}),
         });
-        expect(result.current.getValue('$data#/missing')).toBeUndefined();
+        expect(result.current.getValue('$data#$.missing')).toBeUndefined();
     });
 
     it('throws for an invalid binding expression', () => {

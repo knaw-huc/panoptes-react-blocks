@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { getNestedValue, parseBinding } from '../schema';
+import { parseBinding, resolveBinding } from '../schema';
 import {useScreenContext} from "../hooks";
 
 export default function useScreenState() {
@@ -7,7 +7,7 @@ export default function useScreenState() {
 
     const getValue = useCallback((expression: string): unknown => {
         const { path } = parseBinding(expression);
-        return getNestedValue(data, path);
+        return resolveBinding(data, path);
     }, [data]);
 
     return { getValue };

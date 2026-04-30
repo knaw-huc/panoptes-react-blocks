@@ -97,10 +97,10 @@ const exampleScreenDefinition: ScreenDefinition = {
                 displayType: 'group',
                 groupId: 'file-information',
                 elements: [
-                    { type: 'label', value: '$data#/title' },
-                    { type: 'label', value: '$data#/repository' },
-                    { type: 'label', value: '$data#/accessionDate' },
-                    { type: 'list', value: '$data#/relatedItems' },
+                    { type: 'label', value: '$data#$.title' },
+                    { type: 'label', value: '$data#$.repository' },
+                    { type: 'label', value: '$data#$.accessionDate' },
+                    { type: 'list', value: '$data#$.relatedItems' },
 
                 ]
             },
@@ -110,10 +110,10 @@ const exampleScreenDefinition: ScreenDefinition = {
                 collapsible: true,
                 defaultCollapsed: false,
                 elements: [
-                    { type: 'label', value: '$data#/copyrightStatus' },
-                    { type: 'label', value: '$data#/rightsHolder' },
-                    { type: 'label', value: '$data#/accessLevel' },
-                    { type: 'label', value: '$data#/usageRights' }
+                    { type: 'label', value: '$data#$.copyrightStatus' },
+                    { type: 'label', value: '$data#$.rightsHolder' },
+                    { type: 'label', value: '$data#$.accessLevel' },
+                    { type: 'label', value: '$data#$.usageRights' }
                 ]
             },
             {
@@ -124,12 +124,12 @@ const exampleScreenDefinition: ScreenDefinition = {
                         columns: [
                             {
                                 "elements": [
-                                    { type: 'label', value: '$data#/coordinates/lat' },
+                                    { type: 'label', value: '$data#$.coordinates.lat' },
                                 ]
                             },
                             {
                                 "elements": [
-                                    { type: 'label', value: '$data#/coordinates/lon' },
+                                    { type: 'label', value: '$data#$.coordinates.lon' },
                                 ]
                             },
                         ]
@@ -139,8 +139,8 @@ const exampleScreenDefinition: ScreenDefinition = {
                             {
                                 type: "map",
                                 value: {
-                                    "latitude": "$data#/coordinates/lat",
-                                    "longitude": "$data#/coordinates/lon"
+                                    "latitude": "$data#$.coordinates.lat",
+                                    "longitude": "$data#$.coordinates.lon"
                                 },
                                 config: {
                                     zoom: 6
@@ -154,10 +154,10 @@ const exampleScreenDefinition: ScreenDefinition = {
                 displayType: 'group',
                 groupId: 'technical-information',
                 elements: [
-                    { type: 'external-link', value: '$data#/sourceOfFile' },
-                    { type: 'label', value: '$data#/inception' },
-                    { type: 'label', value: '$data#/mediaType' },
-                    { type: 'label', value: '$data#/checksum' },
+                    { type: 'external-link', value: '$data#$.sourceOfFile' },
+                    { type: 'label', value: '$data#$.inception' },
+                    { type: 'label', value: '$data#$.mediaType' },
+                    { type: 'label', value: '$data#$.checksum' },
                 ],
             }
         ],
