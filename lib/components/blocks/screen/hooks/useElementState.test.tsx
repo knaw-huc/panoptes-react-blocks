@@ -97,6 +97,22 @@ describe('useElementState — label resolution', () => {
         });
         expect(result.current.label).toBe('screens.test-screen.personal.name');
     });
+
+    it('replaces colons in path segments so i18next does not treat them as namespace separators', () => {
+        const element: ElementDefinition = { value: '$data#/metadata/dc:title' };
+        const { result } = renderHook(() => useElementState(element), {
+            wrapper: makeWrapper({ metadata: { 'dc:title': 'A title' } }),
+        });
+        expect(result.current.label).toBe('screens.test-screen.metadata.dc_title');
+    });
+
+    it('replaces whitespace in path segments so the key stays a single i18next token', () => {
+        const element: ElementDefinition = { value: '$data#/metadata/full name' };
+        const { result } = renderHook(() => useElementState(element), {
+            wrapper: makeWrapper({ metadata: { 'full name': 'Alice' } }),
+        });
+        expect(result.current.label).toBe('screens.test-screen.metadata.full_name');
+    });
 });
 
 describe('useElementState — infoLabel resolution', () => {
