@@ -159,6 +159,22 @@ const exampleScreenDefinition: ScreenDefinition = {
                     { type: 'label', value: '$data#$.mediaType' },
                     { type: 'label', value: '$data#$.checksum' },
                 ],
+            },
+            {
+                displayType: 'group',
+                groupId: 'contributors',
+                elements: [
+                    {
+                        type: 'array',
+                        value: '$data#$.contributors',
+                        config: {
+                            itemTemplate: {
+                                name: { type: 'label', value: '$itemData#$.name' },
+                                role: { type: 'label', value: '$itemData#$.role' },
+                            },
+                        },
+                    },
+                ],
             }
         ],
     },
@@ -180,7 +196,11 @@ const exampleScreenData = {
     sourceOfFile: 'https://www.flickr.com/photos/iisg/5786243120',
     inception: '1 March 1948',
     mediaType: 'image/jpeg',
-    checksum: '66fec03641e0596f9bfb339ffecf89c17d424836 (Determination method: SHA-1)'
+    checksum: '66fec03641e0596f9bfb339ffecf89c17d424836 (Determination method: SHA-1)',
+    contributors: [
+        { name: 'Lino Heilings', role: 'Photographer' },
+        { name: 'IISG Archives', role: 'Repository' },
+    ],
 };
 
 const sections: { title: string; element: React.ReactNode }[] = [
