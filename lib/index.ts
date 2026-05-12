@@ -62,7 +62,8 @@ export type {
 export {
     isBindingExpression,
     parseBinding,
-    getNestedValue,
+    resolveBinding,
+    bindingPathSegments,
 } from './components/blocks/screen/schema';
 
 export { default as GhostLine } from './components/ghostline/Ghostline';

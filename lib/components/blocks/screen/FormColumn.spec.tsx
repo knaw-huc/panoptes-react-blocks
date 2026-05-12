@@ -32,7 +32,7 @@ describe('FormColumn', () => {
 
     it('renders a wrapper div when elements are present', () => {
         const column: ColumnDefinition = {
-            elements: [{ value: '$data#/name', type: 'text' }],
+            elements: [{ value: '$data#$.name', type: 'text' }],
         };
         const { container } = renderColumn(column);
         expect(container.firstChild).not.toBeNull();
@@ -41,8 +41,8 @@ describe('FormColumn', () => {
     it('renders one child per element', () => {
         const column: ColumnDefinition = {
             elements: [
-                { value: '$data#/name', type: 'text' },
-                { value: '$data#/name', type: 'text' },
+                { value: '$data#$.name', type: 'text' },
+                { value: '$data#$.name', type: 'text' },
             ],
         };
         const { container } = renderColumn(column);

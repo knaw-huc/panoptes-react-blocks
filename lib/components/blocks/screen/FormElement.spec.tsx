@@ -31,7 +31,7 @@ function useThrowingBlock() {
 
 describe('FormElement — hidden elements', () => {
     it('renders nothing when element.hidden is true', () => {
-        const { container } = renderElement({ value: '$data#/name', hidden: true }, { name: 'Alice' });
+        const { container } = renderElement({ value: '$data#$.name', hidden: true }, { name: 'Alice' });
         expect(container.firstChild).toBeNull();
     });
 });
@@ -49,54 +49,54 @@ describe('FormElement — FallbackBlockRenderer (via ErrorBoundary)', () => {
     });
 
     it('renders a text input for a string value', () => {
-        renderElement({ value: '$data#/name', type: 'text' }, { name: 'Alice' });
+        renderElement({ value: '$data#$.name', type: 'text' }, { name: 'Alice' });
         expect(screen.getByDisplayValue('Alice')).toBeInTheDocument();
         expect(screen.getByRole('textbox')).toHaveAttribute('type', 'text');
     });
 
     it('renders a textarea for a multiline string value', () => {
-        renderElement({ value: '$data#/bio' }, { bio: 'Line one\nLine two' });
+        renderElement({ value: '$data#$.bio' }, { bio: 'Line one\nLine two' });
         expect(screen.getByRole('textbox')).toBeInTheDocument();
         expect(document.querySelector('textarea')).toBeInTheDocument();
     });
 
     it('renders a number input for a numeric value', () => {
-        renderElement({ value: '$data#/age' }, { age: 30 });
+        renderElement({ value: '$data#$.age' }, { age: 30 });
         expect(document.querySelector('input[type="number"]')).toBeInTheDocument();
         expect(screen.getByDisplayValue('30')).toBeInTheDocument();
     });
 
     it('renders a date input for a date-formatted string', () => {
-        renderElement({ value: '$data#/dob' }, { dob: '1990-05-15' });
+        renderElement({ value: '$data#$.dob' }, { dob: '1990-05-15' });
         expect(document.querySelector('input[type="date"]')).toBeInTheDocument();
     });
 
     it('renders a checkbox for a boolean value', () => {
-        renderElement({ value: '$data#/active' }, { active: true });
+        renderElement({ value: '$data#$.active' }, { active: true });
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toBeInTheDocument();
         expect(checkbox).toBeChecked();
     });
 
     it('renders an unchecked checkbox for false', () => {
-        renderElement({ value: '$data#/active' }, { active: false });
+        renderElement({ value: '$data#$.active' }, { active: false });
         expect(screen.getByRole('checkbox')).not.toBeChecked();
     });
 
     it('renders the element label', () => {
-        renderElement({ value: '$data#/name', label: 'Full Name', type: 'text' }, { name: 'Bob' });
+        renderElement({ value: '$data#$.name', label: 'Full Name', type: 'text' }, { name: 'Bob' });
         expect(screen.getByText('Full Name')).toBeInTheDocument();
     });
 
     it('renders an auto-generated label key when no label is set', () => {
-        renderElement({ value: '$data#/name', type: 'text' }, { name: 'Bob' });
+        renderElement({ value: '$data#$.name', type: 'text' }, { name: 'Bob' });
         // auto key: screens.test-screen.name (screen id + path)
         expect(screen.getByText('screens.test-screen.name')).toBeInTheDocument();
     });
 
     it('renders a select as a text input showing the matching option label', () => {
         const element: ElementDefinition = {
-            value: '$data#/status',
+            value: '$data#$.status',
             type: 'select',
             config: {
                 options: [
@@ -110,7 +110,7 @@ describe('FormElement — FallbackBlockRenderer (via ErrorBoundary)', () => {
     });
 
     it('renders a prose element as a span', () => {
-        renderElement({ value: '$data#/note', type: 'prose' }, { note: 'Some note' });
+        renderElement({ value: '$data#$.note', type: 'prose' }, { note: 'Some note' });
         expect(screen.getByText('Some note')).toBeInTheDocument();
         expect(document.querySelector('input')).toBeNull();
     });

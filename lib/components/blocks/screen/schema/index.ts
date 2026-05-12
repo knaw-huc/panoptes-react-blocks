@@ -24,7 +24,8 @@ export type {
 export {
     isBindingExpression,
     parseBinding,
-    getNestedValue,
+    resolveBinding,
+    bindingPathSegments,
 } from './binding';
 
 export type { ParsedBinding } from './binding';

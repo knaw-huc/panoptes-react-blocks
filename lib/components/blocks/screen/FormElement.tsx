@@ -6,7 +6,7 @@ import GhostLine from "../../ghostline/Ghostline.tsx";
 import styles from './FormElement.module.css';
 import {ErrorBoundary} from "react-error-boundary";
 import {ItemDataProvider} from "./context/ItemDataContext.tsx";
-import {getNestedValue, parseBinding} from "./schema";
+import {parseBinding, resolveBinding} from "./schema";
 
 interface FormElementProps {
     element: ElementDefinition;
@@ -84,11 +84,9 @@ const renderValue = (type: string, value: unknown,
             );
 
         case 'array':
-            let val = Array.isArray(value) ? value : [value];
-
             return (
                 <ArrayDisplay
-                    value={val as unknown[]}
+                    value={Array.isArray(value) ? value : [value]}
                     element={element}
                 />
             );
@@ -221,7 +219,7 @@ function isEmptyItem(item: unknown, itemTemplate: ItemTemplate | undefined): boo
     if (itemTemplate) {
         return Object.values(itemTemplate).every(field => {
             const parsed = parseBinding(field.value);
-            const v = getNestedValue(item, parsed.path);
+            const v = resolveBinding(item, parsed.path);
             return v == null || String(v).trim() === '';
         });
     }

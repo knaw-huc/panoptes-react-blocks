@@ -1,6 +1,6 @@
 import type {ElementDefinition} from "../schema";
 import useScreenState from "./useScreenState.ts";
-import {getNestedValue, isBindingExpression, parseBinding} from "../schema";
+import {bindingPathSegments, isBindingExpression, parseBinding, resolveBinding} from "../schema";
 import {useItemData} from "./useItemData.ts";
 import useScreenContext from "./useScreenContext.ts";
 
@@ -8,10 +8,10 @@ function sanitizeKeySegment(segment: string): string {
     return segment.replace(/[:\s]/g, '_');
 }
 
-function buildLabelKey(screenId: string, groupId: string | undefined, path: string[]): string {
+function buildLabelKey(screenId: string, groupId: string | undefined, path: string): string {
     const parts = ['screens', screenId];
     if (groupId) parts.push(groupId);
-    parts.push(...path.map(sanitizeKeySegment));
+    parts.push(...bindingPathSegments(path).map(sanitizeKeySegment));
     return parts.join('.');
 }
 
@@ -23,7 +23,7 @@ export default function useElementState(element: ElementDefinition, groupId?: st
     const resolveValue = (expression: string): unknown => {
         const parsed = parseBinding(expression);
         if (parsed.source === 'itemData') {
-            return getNestedValue(itemData, parsed.path);
+            return resolveBinding(itemData, parsed.path);
         }
         return getValue(expression);
     };

@@ -265,33 +265,46 @@ Each `SidebarNavItemDefinition` has an `icon` (Lucide icon name in kebab-case, e
 
 ### Bindings
 
-Element `value` fields and `itemTemplate` field values use binding expressions to pull data from the block's payload:
+Element `value` fields and `itemTemplate` field values use binding expressions to pull data from the block's payload. A binding is a source prefix followed by `#` and a [JSONPath](https://goessner.net/articles/JsonPath/) expression rooted at `$`:
 
 | Expression | Source |
 |---|---|
-| `$data#/field/subfield` | The `value` object of the `ScreenBlock` |
-| `$itemData#/field` | The current item object when rendering inside an `array` element |
+| `$data#$.field.subfield` | The `value` object of the `ScreenBlock` |
+| `$itemData#$.field` | The current item object when rendering inside an `array` element |
 
-Path segments are separated by `/` and follow [JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901) escaping rules: within a segment, `~1` decodes to `/` and `~0` decodes to `~`. This lets bindings target keys that themselves contain slashes or tildes — e.g. `$itemData#/metadata/Caption~1Abstract` resolves the key `Caption/Abstract` under `metadata`.
+The portion after `#` is a standard JSONPath, evaluated with [`jsonpath-plus`](https://www.npmjs.com/package/jsonpath-plus). Anything valid in JSONPath is supported, including:
+
+- Dot or bracket child access — `$.user.city`, `$['user']['city']`
+- Array index access — `$.items[0].title`
+- Bracket notation for keys with special characters — `$['Caption/Abstract']`, `$.metadata['dc:title']`
+- Wildcards — `$.items[*].title`
+- Recursive descent — `$..title`
+- Filter expressions — `$.items[?(@.published==true)].title`
+
+Resolution semantics:
+
+- **Single match** → the matched value is returned directly (string, number, object, etc.).
+- **Multiple matches** (wildcards, recursive descent, filters) → an array of matched values is returned.
+- **No match** → `undefined`.
 
 The `value` field on an `ElementDefinition` supports three forms:
 
-**Single string** — resolves to a single value and enables autokey label generation:
+**Single string** — resolves to a single value (or array, for multi-match expressions) and enables autokey label generation:
 ```jsonc
-{ "value": "$data#/title", "type": "text" }
+{ "value": "$data#$.title", "type": "text" }
 ```
 
 **Array of strings** — each binding is resolved independently; the block receives an array of resolved values. Useful for blocks that combine multiple data fields:
 ```jsonc
-{ "value": ["$data#/firstName", "$data#/lastName"], "type": "full-name" }
+{ "value": ["$data#$.firstName", "$data#$.lastName"], "type": "full-name" }
 ```
 
 **Object with string values** — each property's binding expression is resolved independently; the block receives a plain object with the resolved values. Useful for blocks that need named inputs (e.g. a map block needing separate latitude/longitude fields). No autokey is generated in this form:
 ```jsonc
 {
   "value": {
-    "latitude": "$data#/plaatsBreedtegraad",
-    "longitude": "$data#/plaatsLengtegraad"
+    "latitude": "$data#$.plaatsBreedtegraad",
+    "longitude": "$data#$.plaatsLengtegraad"
   },
   "type": "map",
   "config": { "zoom": 6 }
@@ -317,7 +330,7 @@ All `label` (and `infoLabel`) fields are optional. When omitted, a translation k
 | Action confirmation ok | `screens.{screenId}.actions.{actionId}.ok` | `screens.journal-detail.actions.save.ok` |
 | Action confirmation cancel | `screens.{screenId}.actions.{actionId}.cancel` | `screens.journal-detail.actions.save.cancel` |
 
-The `{field}` segment is the path from the binding expression — e.g. `$data#/title` produces `title`, and `$data#/address/city` produces `address.city`. Characters within a path segment that would conflict with the dot-separated key format — colons (`:`) and whitespace — are replaced with `_` when building the autokey, so a binding such as `$data#/dc:title` produces the autokey segment `dc_title`.
+The `{field}` segment is derived from the binding's JSONPath — e.g. `$data#$.title` produces `title`, and `$data#$.address.city` produces `address.city`. Bracket notation is normalized into segments (`$.items[0].title` → `items.0.title`), and characters that would conflict with the dot-separated key format — colons (`:`) and whitespace — are replaced with `_`, so a binding such as `$data#$.metadata['dc:title']` produces the autokey segment `metadata.dc_title`.
 
 When a `label` is provided explicitly it is used as-is (also passed through `translateFn`), which allows overriding the autokey with a custom translation key or a literal string.
 
@@ -400,7 +413,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
           {
             "elements": [
               {
-                "value": "$data#/lidwoordTitel",
+                "value": "$data#$.lidwoordTitel",
                 "type": "label"
               }
             ]
@@ -408,7 +421,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
           {
             "elements": [
               {
-                "value": "$data#/titelVanTijdschrift",
+                "value": "$data#$.titelVanTijdschrift",
                 "type": "label"
               }
             ]
@@ -416,7 +429,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
           {
             "elements": [
               {
-                "value": "$data#/onderTitel",
+                "value": "$data#$.onderTitel",
                 "type": "label"
               }
             ]
@@ -432,7 +445,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/uitgever",
+                    "value": "$data#$.uitgever",
                     "type": "link",
                     "config": {
                       "url": "/politieke-tijdschriften-uitgever_drukker/details/$uitgeverId"
@@ -443,7 +456,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/drukker",
+                    "value": "$data#$.drukker",
                     "type": "link",
                     "config": {
                       "url": "/politieke-tijdschriften-uitgever_drukker/details/$drukkerId"
@@ -454,7 +467,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/plaats",
+                    "value": "$data#$.plaats",
                     "type": "link",
                     "config": {
                       "url": "/politieke-tijdschriften-plaatsnaam/details/$plaatsId"
@@ -469,7 +482,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/uitgeverZeker",
+                    "value": "$data#$.uitgeverZeker",
                     "type": "toggle"
                   }
                 ]
@@ -477,7 +490,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/drukkerZeker",
+                    "value": "$data#$.drukkerZeker",
                     "type": "toggle"
                   }
                 ]
@@ -485,7 +498,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/nietBewaard",
+                    "value": "$data#$.nietBewaard",
                     "type": "toggle"
                   }
                 ]
@@ -493,7 +506,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/vrijheidGelijkheidBroederschap",
+                    "value": "$data#$.vrijheidGelijkheidBroederschap",
                     "type": "toggle"
                   }
                 ]
@@ -511,7 +524,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/eersteNummer",
+                    "value": "$data#$.eersteNummer",
                     "type": "label"
                   }
                 ]
@@ -519,7 +532,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/laatsteNummer",
+                    "value": "$data#$.laatsteNummer",
                     "type": "label"
                   }
                 ]
@@ -527,7 +540,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/prijsDuiten",
+                    "value": "$data#$.prijsDuiten",
                     "type": "label"
                   }
                 ]
@@ -535,7 +548,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
               {
                 "elements": [
                   {
-                    "value": "$data#/afleveringen",
+                    "value": "$data#$.afleveringen",
                     "type": "label"
                   }
                 ]
@@ -545,7 +558,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
           {
             "elements": [
               {
-                "value": "$data#/formaat",
+                "value": "$data#$.formaat",
                 "type": "label"
               }
             ]
@@ -559,7 +572,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
           {
             "elements": [
               {
-                "value": "$data#/vormTijdschrift",
+                "value": "$data#$.vormTijdschrift",
                 "type": "label"
               }
             ]
@@ -567,7 +580,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
           {
             "elements": [
               {
-                "value": "$data#/typeTijdschrift",
+                "value": "$data#$.typeTijdschrift",
                 "type": "label"
               }
             ]
@@ -575,7 +588,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
           {
             "elements": [
               {
-                "value": "$data#/politiekePositie",
+                "value": "$data#$.politiekePositie",
                 "type": "label"
               }
             ]
@@ -587,25 +600,25 @@ Any `type` that matches a registered Panoptes block is rendered using that block
         "groupId": "inhoud",
         "elements": [
           {
-            "value": "$data#/korteOmschrijvingInhoud",
+            "value": "$data#$.korteOmschrijvingInhoud",
             "type": "markdown",
             "config": {
             }
           },
           {
-            "value": "$data#/verantwoordingSelectie",
+            "value": "$data#$.verantwoordingSelectie",
             "type": "markdown",
             "config": {
             }
           },
           {
-            "value": "$data#/toelichtingRedacteurAuteur",
+            "value": "$data#$.toelichtingRedacteurAuteur",
             "type": "markdown",
             "config": {
             }
           },
           {
-            "value": "$data#/advertenties_en_andere_verwijsplaatsen",
+            "value": "$data#$.advertenties_en_andere_verwijsplaatsen",
             "type": "markdown"
           }
         ]
@@ -615,7 +628,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
         "groupId": "aanvullende-titels",
         "elements": [
           {
-            "value": "$data#/aanvullendeTitels",
+            "value": "$data#$.aanvullendeTitels",
             "type": "list"
           }
         ]
@@ -625,7 +638,7 @@ Any `type` that matches a registered Panoptes block is rendered using that block
         "groupId": "artikel-types",
         "elements": [
           {
-            "value": "$data#/artikelType",
+            "value": "$data#$.artikelType",
             "type": "list"
           }
         ]
