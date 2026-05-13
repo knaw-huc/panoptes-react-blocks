@@ -1,10 +1,25 @@
-import {createContext, type ReactNode} from 'react';
+import {createContext, type ReactNode, useContext} from 'react';
 
-const ItemDataContext = createContext<Record<string, unknown> | null>(null);
+export interface ItemDataContextValue {
+    item: Record<string, unknown>;
+    labelPathPrefix: string[];
+}
 
-export function ItemDataProvider({ item, children }: { item: Record<string, unknown>; children: ReactNode }) {
+const ItemDataContext = createContext<ItemDataContextValue | null>(null);
+
+export function ItemDataProvider({
+    item,
+    labelPathPrefix = [],
+    children,
+}: {
+    item: Record<string, unknown>;
+    labelPathPrefix?: string[];
+    children: ReactNode;
+}) {
+    const parent = useContext(ItemDataContext);
+    const combinedPrefix = [...(parent?.labelPathPrefix ?? []), ...labelPathPrefix];
     return (
-        <ItemDataContext.Provider value={item}>
+        <ItemDataContext.Provider value={{ item, labelPathPrefix: combinedPrefix }}>
             {children}
         </ItemDataContext.Provider>
     );

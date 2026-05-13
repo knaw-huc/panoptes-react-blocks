@@ -17,10 +17,10 @@ const baseScreen: ScreenDefinition = {
     form: { rows: [] },
 };
 
-function renderElement(element: ElementDefinition, data: Record<string, unknown> = {}) {
+function renderElement(element: ElementDefinition, data: Record<string, unknown> = {}, groupId?: string) {
     return render(
         <ScreenProvider screenDefinition={baseScreen} data={data}>
-            <FormElement element={element} />
+            <FormElement element={element} groupId={groupId} />
         </ScreenProvider>
     );
 }
@@ -113,5 +113,73 @@ describe('FormElement — FallbackBlockRenderer (via ErrorBoundary)', () => {
         renderElement({ value: '$data#$.note', type: 'prose' }, { note: 'Some note' });
         expect(screen.getByText('Some note')).toBeInTheDocument();
         expect(document.querySelector('input')).toBeNull();
+    });
+});
+
+describe('FormElement — ArrayDisplay with itemTemplate', () => {
+    beforeEach(() => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+        useThrowingBlock();
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        vi.mocked(useBlock).mockReturnValue(null as any);
+    });
+
+    const data = {
+        items: [
+            { title: 'First',  locusFrom: '1r', locusTo: '3v' },
+            { title: 'Second', locusFrom: '4r', locusTo: '6v' },
+        ],
+    };
+
+    const titleField: ElementDefinition = { type: 'label', value: '$itemData#$.title' };
+    const locusField: ElementDefinition = {
+        type: 'page-range',
+        value: { from: '$itemData#$.locusFrom', to: '$itemData#$.locusTo' },
+    };
+
+    it('renders items when the object-valued field comes after a string-valued field', () => {
+        renderElement(
+            {
+                type: 'array',
+                value: '$data#$.items',
+                config: { itemTemplate: { title: titleField, locus: locusField } },
+            },
+            data,
+        );
+        expect(screen.getByDisplayValue('First')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Second')).toBeInTheDocument();
+    });
+
+    it('renders items when the object-valued field comes first in the itemTemplate', () => {
+        renderElement(
+            {
+                type: 'array',
+                value: '$data#$.items',
+                config: { itemTemplate: { locus: locusField, title: titleField } },
+            },
+            data,
+        );
+        expect(screen.getByDisplayValue('First')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Second')).toBeInTheDocument();
+    });
+
+    it('builds itemTemplate field auto label keys from groupId + array path + field path', () => {
+        const nameField: ElementDefinition = { type: 'label', value: '$itemData#$.name' };
+        const roleField: ElementDefinition = { type: 'label', value: '$itemData#$.role' };
+        renderElement(
+            {
+                type: 'array',
+                value: '$data#$.contributors',
+                config: { itemTemplate: { name: nameField, role: roleField } },
+            },
+            { contributors: [{ name: 'Alice', role: 'Photographer' }] },
+            'contributors',
+        );
+        expect(screen.getByText('screens.test-screen.contributors.contributors.name')).toBeInTheDocument();
+        expect(screen.getByText('screens.test-screen.contributors.contributors.role')).toBeInTheDocument();
     });
 });
