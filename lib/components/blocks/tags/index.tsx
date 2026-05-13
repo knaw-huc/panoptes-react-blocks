@@ -4,20 +4,22 @@ import classes from "./Tags.module.css";
 
 export interface TagsBlock extends Block {
     type: 'tags';
-    value: string[];
+    value: string | string[];
 }
 
 export default function TagsBlockRenderer({block}: { block: Block }) {
 
     const { value } = block as TagsBlock;
 
-    if (!Array.isArray(value) || value.length === 0) {
+    const tags = typeof value === 'string' ? [value] : value;
+
+    if (!Array.isArray(tags) || tags.length === 0) {
         return <span className={blockClasses.empty}>—</span>;
     }
 
     return (
         <ul className={classes.tags}>
-            {value.map((tag, index) => (
+            {tags.map((tag, index) => (
                 <li key={`${index}-${tag}`} className={classes.tag}>{tag}</li>
             ))}
         </ul>

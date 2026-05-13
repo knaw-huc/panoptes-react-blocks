@@ -239,6 +239,17 @@ const sections: { title: string; element: React.ReactNode }[] = [
         ),
     },
     {
+        title: 'TagsBlockRenderer single value',
+        element: (
+            <TagsBlockRenderer
+                block={{
+                    type: 'tags',
+                    value: 'Amsterdam Zuid'
+                }}
+            />
+        ),
+    },
+    {
         title: 'ExternalLinkBlockRenderer',
         element: (
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>

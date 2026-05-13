@@ -11,6 +11,11 @@ describe('TagsBlockRenderer', () => {
         expect(screen.getByText('literatuur')).toBeInTheDocument();
     });
 
+    it('renders a single string value as one tag', () => {
+        render(<TagsBlockRenderer block={{ type: 'tags', value: 'Amsterdam Zuid' }} />);
+        expect(screen.getByText('Amsterdam Zuid')).toBeInTheDocument();
+    });
+
     it('renders an em dash when the array is empty', () => {
         render(<TagsBlockRenderer block={{ type: 'tags', value: [] }} />);
         expect(screen.getByText('—')).toBeInTheDocument();
