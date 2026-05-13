@@ -14,7 +14,8 @@ const baseScreen: ScreenDefinition = {
 
 function makeWrapper(
     data: Record<string, unknown>,
-    itemData?: Record<string, unknown>
+    itemData?: Record<string, unknown>,
+    labelPathPrefix?: string[]
 ) {
     return ({ children }: { children: React.ReactNode }) => {
         const inner = (
@@ -23,7 +24,7 @@ function makeWrapper(
             </ScreenProvider>
         );
         return itemData
-            ? <ItemDataProvider item={itemData}>{inner}</ItemDataProvider>
+            ? <ItemDataProvider item={itemData} labelPathPrefix={labelPathPrefix}>{inner}</ItemDataProvider>
             : inner;
     };
 }
@@ -119,6 +120,22 @@ describe('useElementState — label resolution', () => {
             wrapper: makeWrapper({ metadata: { 'full name': 'Alice' } }),
         });
         expect(result.current.label).toBe('screens.test-screen.metadata.full_name');
+    });
+
+    it('prepends the ItemDataProvider labelPathPrefix to an $itemData auto label key', () => {
+        const element: ElementDefinition = { value: '$itemData#$.name' };
+        const { result } = renderHook(() => useElementState(element, 'contributors'), {
+            wrapper: makeWrapper({}, { name: 'Alice' }, ['contributors']),
+        });
+        expect(result.current.label).toBe('screens.test-screen.contributors.contributors.name');
+    });
+
+    it('does not prepend the labelPathPrefix to a $data auto label key', () => {
+        const element: ElementDefinition = { value: '$data#$.title' };
+        const { result } = renderHook(() => useElementState(element), {
+            wrapper: makeWrapper({ title: 'Hello' }, { name: 'Alice' }, ['contributors']),
+        });
+        expect(result.current.label).toBe('screens.test-screen.title');
     });
 });
 

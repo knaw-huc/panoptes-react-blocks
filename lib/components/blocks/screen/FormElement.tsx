@@ -6,7 +6,7 @@ import GhostLine from "../../ghostline/Ghostline.tsx";
 import styles from './FormElement.module.css';
 import {ErrorBoundary} from "react-error-boundary";
 import {ItemDataProvider} from "./context/ItemDataContext.tsx";
-import {parseBinding, resolveBinding} from "./schema";
+import {bindingPathSegments, isBindingExpression, parseBinding, resolveBinding} from "./schema";
 
 interface FormElementProps {
     element: ElementDefinition;
@@ -35,7 +35,8 @@ const inferElementType = (value: unknown): string => {
 }
 
 const renderValue = (type: string, value: unknown,
-                     element: ElementDefinition) => {
+                     element: ElementDefinition,
+                     groupId?: string) => {
     const commonProps = {
         readOnly: true,
         disabled: true,
@@ -88,6 +89,7 @@ const renderValue = (type: string, value: unknown,
                 <ArrayDisplay
                     value={Array.isArray(value) ? value : [value]}
                     element={element}
+                    groupId={groupId}
                 />
             );
 
@@ -177,7 +179,7 @@ const FallbackBlockRenderer = ({ element, groupId }: FormElementProps) => {
                 </label>
             )}
 
-            {renderValue(elementType, value, element)}
+            {renderValue(elementType, value, element, groupId)}
 
             {infoLabel && (
                 <span className={styles.info}>
@@ -200,33 +202,39 @@ export default function FormElement({ element, groupId }: FormElementProps) {
     );
 }
 
-interface ItemTemplateField {
-    label: string;
-    type: string;
-    value: string;
-}
-
 interface ItemTemplate {
-    [key: string]: ItemTemplateField;
+    [key: string]: ElementDefinition;
 }
 
 interface ArrayDisplayProps {
     value: unknown[];
     element: ElementDefinition;
+    groupId?: string;
+}
+
+function isEmptyBindingValue(item: unknown, value: ElementDefinition['value']): boolean {
+    if (typeof value === 'string') {
+        const parsed = parseBinding(value);
+        const v = resolveBinding(item, parsed.path);
+        return v == null || String(v).trim() === '';
+    }
+    if (Array.isArray(value)) {
+        return value.every(v => isEmptyBindingValue(item, v));
+    }
+    if (value && typeof value === 'object') {
+        return Object.values(value).every(v => isEmptyBindingValue(item, v));
+    }
+    return true;
 }
 
 function isEmptyItem(item: unknown, itemTemplate: ItemTemplate | undefined): boolean {
     if (itemTemplate) {
-        return Object.values(itemTemplate).every(field => {
-            const parsed = parseBinding(field.value);
-            const v = resolveBinding(item, parsed.path);
-            return v == null || String(v).trim() === '';
-        });
+        return Object.values(itemTemplate).every(field => isEmptyBindingValue(item, field.value));
     }
     return item == null || String(item).trim() === '';
 }
 
-function ArrayDisplay({ value, element }: ArrayDisplayProps) {
+function ArrayDisplay({ value, element, groupId }: ArrayDisplayProps) {
     const items = Array.isArray(value) ? value : [];
     const itemTemplate = element.config?.itemTemplate as ItemTemplate | undefined;
 
@@ -234,16 +242,20 @@ function ArrayDisplay({ value, element }: ArrayDisplayProps) {
         return null;
     }
 
+    const arrayLabelPrefix = typeof element.value === 'string' && isBindingExpression(element.value)
+        ? bindingPathSegments(parseBinding(element.value).path)
+        : [];
+
     if (itemTemplate) {
         return (
             <div className={styles.arrayInput}>
                 {items.map((item, index) => (
-                    <ItemDataProvider key={index} item={item as Record<string, unknown>}>
+                    <ItemDataProvider key={index} item={item as Record<string, unknown>} labelPathPrefix={arrayLabelPrefix}>
                         {!isEmptyItem(item, itemTemplate) && <div className={styles.arrayItem}>
                             <div className={styles.arrayItemFields}>
                                 {Object.entries(itemTemplate).map(([field, config]) => (
                                     <div className={styles.arrayItemField}>
-                                        <FormElement key={field} element={config} />
+                                        <FormElement key={field} element={config} groupId={groupId} />
                                     </div>
                                 ))}
                             </div>

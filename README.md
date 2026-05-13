@@ -343,6 +343,8 @@ All `label` (and `infoLabel`) fields are optional. When omitted, a translation k
 
 The `{field}` segment is derived from the binding's JSONPath — e.g. `$data#$.title` produces `title`, and `$data#$.address.city` produces `address.city`. Bracket notation is normalized into segments (`$.items[0].title` → `items.0.title`), and characters that would conflict with the dot-separated key format — colons (`:`) and whitespace — are replaced with `_`, so a binding such as `$data#$.metadata['dc:title']` produces the autokey segment `metadata.dc_title`.
 
+For elements rendered inside an `array` element's `itemTemplate`, an `$itemData#$.field` binding's autokey is prefixed with the enclosing array binding's path. For example, an array bound to `$data#$.aanvullendeTitels` with an item template field bound to `$itemData#$.titel` produces the autokey `screens.{screenId}.{groupId}.aanvullendeTitels.titel`. Nested arrays compose: each `ItemDataProvider` layer adds its array's path to the prefix.
+
 When a `label` is provided explicitly it is used as-is (also passed through `translateFn`), which allows overriding the autokey with a custom translation key or a literal string.
 
 ### Element types

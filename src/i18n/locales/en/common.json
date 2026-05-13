@@ -73,5 +73,13 @@
   "screens.bypass-item-view.technical-information.mediaType": "Media type",
   "screens.bypass-item-view.technical-information.mediaType.info": "",
   "screens.bypass-item-view.technical-information.checksum": "Checksum",
-  "screens.bypass-item-view.technical-information.checksum.info": ""
+  "screens.bypass-item-view.technical-information.checksum.info": "",
+
+  "screens.bypass-item-view.contributors": "Contributors",
+  "screens.bypass-item-view.contributors.contributors": "Contributor list",
+  "screens.bypass-item-view.contributors.contributors.name": "Contributor name",
+  "screens.bypass-item-view.contributors.contributors.name.info": "",
+  "screens.bypass-item-view.contributors.contributors.role": "Contributor role",
+  "screens.bypass-item-view.contributors.contributors.role.info": "",
+  "screens.bypass-item-view.contributors.contributors.info": ""
 }

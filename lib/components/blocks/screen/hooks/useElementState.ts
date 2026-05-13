@@ -1,23 +1,24 @@
 import type {ElementDefinition} from "../schema";
 import useScreenState from "./useScreenState.ts";
 import {bindingPathSegments, isBindingExpression, parseBinding, resolveBinding} from "../schema";
-import {useItemData} from "./useItemData.ts";
+import {useItemData, useItemLabelPrefix} from "./useItemData.ts";
 import useScreenContext from "./useScreenContext.ts";
 
 function sanitizeKeySegment(segment: string): string {
     return segment.replace(/[:\s]/g, '_');
 }
 
-function buildLabelKey(screenId: string, groupId: string | undefined, path: string): string {
+function buildLabelKey(screenId: string, groupId: string | undefined, segments: string[]): string {
     const parts = ['screens', screenId];
     if (groupId) parts.push(groupId);
-    parts.push(...bindingPathSegments(path).map(sanitizeKeySegment));
+    parts.push(...segments.map(sanitizeKeySegment));
     return parts.join('.');
 }
 
 export default function useElementState(element: ElementDefinition, groupId?: string) {
     const { getValue } = useScreenState();
     const itemData = useItemData();
+    const itemLabelPrefix = useItemLabelPrefix();
     const { screenDefinition } = useScreenContext();
 
     const resolveValue = (expression: string): unknown => {
@@ -28,9 +29,15 @@ export default function useElementState(element: ElementDefinition, groupId?: st
         return getValue(expression);
     };
 
-    const autoLabelKey = typeof element.value === 'string' && isBindingExpression(element.value)
-        ? buildLabelKey(screenDefinition.id, groupId, parseBinding(element.value).path)
-        : undefined;
+    let autoLabelKey: string | undefined;
+    if (typeof element.value === 'string' && isBindingExpression(element.value)) {
+        const parsed = parseBinding(element.value);
+        const fieldSegments = bindingPathSegments(parsed.path);
+        const segments = parsed.source === 'itemData'
+            ? [...itemLabelPrefix, ...fieldSegments]
+            : fieldSegments;
+        autoLabelKey = buildLabelKey(screenDefinition.id, groupId, segments);
+    }
 
     const resolvedValue = Array.isArray(element.value)
         ? element.value.map(resolveValue)
