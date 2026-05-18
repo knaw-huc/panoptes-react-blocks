@@ -84,6 +84,17 @@ interface ToggleBlock extends Block {
 }
 ```
 
+### `TagsBlockRenderer`
+
+Renders `value` as a list of tags. A single string is rendered as a one-item list; an empty array renders an em-dash placeholder.
+
+```ts
+interface TagsBlock extends Block {
+    type: 'tags';
+    value: string | string[];
+}
+```
+
 ### `MapBlockRenderer`
 
 Renders an OpenLayers map centred on a lat/lon coordinate with a marker. Defaults to OpenStreetMap tiles.

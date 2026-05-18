@@ -14,6 +14,7 @@ import RenderScreenBlock from "../lib/components/blocks/screen";
 import "./i18n/i18n.ts";
 import {createTranslate} from "./i18n/i18n.ts";
 import '@knaw-huc/panoptes-react/style.css';
+import TagsBlockRenderer from "../lib/components/blocks/tags";
 
 const exampleScreenDefinition: ScreenDefinition = {
     id: 'bypass-item-view',
@@ -244,6 +245,28 @@ const sections: { title: string; element: React.ReactNode }[] = [
                 <ToggleBlockRenderer block={{ type: 'toggle', value: true }} />
                 <ToggleBlockRenderer block={{ type: 'toggle', value: false }} />
             </div>
+        ),
+    },
+    {
+        title: 'TagsBlockRenderer',
+        element: (
+            <TagsBlockRenderer
+                block={{
+                    type: 'tags',
+                    value: ['Amsterdam Zuid', 'beeldenkunst', 'literatuur', 'stedelijk', 'omslag', 'drukwerk'],
+                }}
+            />
+        ),
+    },
+    {
+        title: 'TagsBlockRenderer single value',
+        element: (
+            <TagsBlockRenderer
+                block={{
+                    type: 'tags',
+                    value: 'Amsterdam Zuid'
+                }}
+            />
         ),
     },
     {

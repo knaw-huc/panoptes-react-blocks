@@ -8,6 +8,7 @@ import MapBlockRenderer from './components/blocks/map';
 import MarkdownBlockRenderer from './components/blocks/markdown';
 import ScreenBlockRenderer from './components/blocks/screen';
 import ToggleBlockRenderer from './components/blocks/toggle';
+import TagsBlockRenderer from "./components/blocks/tags";
 
 export { default as ExternalLinkBlockRenderer } from './components/blocks/external-link';
 export type { ExternalLinkBlock } from './components/blocks/external-link';
@@ -77,4 +78,5 @@ export const panoptesBlocksLibrary = new Map([
     ['markdown', MarkdownBlockRenderer],
     ['screen', ScreenBlockRenderer],
     ['toggle', ToggleBlockRenderer],
+    ['tags', TagsBlockRenderer]
 ]) as Map<string, React.FC<{ block: Block }>>;
