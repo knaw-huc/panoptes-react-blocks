@@ -117,6 +117,13 @@
     border-radius: 0.375rem;
 }
 
+.arrayItemRows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+}
+
 .arrayItemFields {
     display: flex;
     flex-wrap: wrap;

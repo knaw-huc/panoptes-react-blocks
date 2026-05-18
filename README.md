@@ -345,6 +345,8 @@ The `{field}` segment is derived from the binding's JSONPath — e.g. `$data#$.t
 
 For elements rendered inside an `array` element's `itemTemplate`, an `$itemData#$.field` binding's autokey is prefixed with the enclosing array binding's path. For example, an array bound to `$data#$.aanvullendeTitels` with an item template field bound to `$itemData#$.titel` produces the autokey `screens.{screenId}.{groupId}.aanvullendeTitels.titel`. Nested arrays compose: each `ItemDataProvider` layer adds its array's path to the prefix.
 
+An `itemTemplate` can also be expressed as `{ rows: RowDefinition[] }` to lay out fields across multiple rows within each item — each row contains an `elements` array (and optionally nested `rows` or `columns`), reusing the same shape as the screen-level `RowDefinition`. Within a row, elements flow side by side; rows are stacked vertically inside the array item. This is useful for information-dense items or when a nested array within an item should occupy its own row.
+
 When a `label` is provided explicitly it is used as-is (also passed through `translateFn`), which allows overriding the autokey with a custom translation key or a literal string.
 
 ### Element types
@@ -374,7 +376,7 @@ Explicit types available:
 | `checkbox` | `<input type="checkbox">` (read-only) | — |
 | `prose` | Inline `<span>` | — |
 | `select` | Resolved option label in `<input type="text">` | `config.options: { value, label }[]` |
-| `array` | List of text inputs, or templated item rows | `config.itemTemplate`: map of field name → `ElementDefinition` |
+| `array` | List of text inputs, or templated item rows | `config.itemTemplate`: either a map of field name → `ElementDefinition` (single-row layout), or `{ rows: RowDefinition[] }` to group fields across multiple rows |
 
 Any `type` that matches a registered Panoptes block is rendered using that block component. If no matching block is found (or the block component throws), the element falls back to the native HTML renderer above.
 
