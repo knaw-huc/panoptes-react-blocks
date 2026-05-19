@@ -26,9 +26,7 @@ export const withVisibleScreenDefinition: ScreenDefinition = {
                 groupId: 'metadata-summary',
                 elements: [
                     {type: 'label', value: '$data#$.contentType'},
-                    {type: 'label', value: '$data#$.resourceName'},
-                    {type: 'label', value: '$data#$.contentLength'},
-                    {type: 'label', value: '$data#$.lastModified'},
+                    {type: 'label', value: '$data#$.resourceName'}
                 ],
             },
             {
@@ -45,20 +43,7 @@ export const withVisibleScreenDefinition: ScreenDefinition = {
                     {type: 'label', value: '$data#$.image.colorSpace'},
                     {type: 'label', value: '$data#$.image.compression'},
                     {type: 'label', value: '$data#$.image.cameraMake'},
-                    {type: 'label', value: '$data#$.image.cameraModel'},
-                    {type: 'label', value: '$data#$.image.exposureTime'},
-                    {type: 'label', value: '$data#$.image.fNumber'},
-                    {type: 'label', value: '$data#$.image.isoSpeed'},
-                    {type: 'label', value: '$data#$.image.dateTimeOriginal'},
-                    {
-                        type: 'map',
-                        label: 'GPS Position',
-                        value: {
-                            latitude: '$data#$.image.gpsLatitude',
-                            longitude: '$data#$.image.gpsLongitude',
-                        },
-                        config: {zoom: 10},
-                    },
+                    {type: 'label', value: '$data#$.image.cameraModel'}
                 ],
             },
             {
@@ -73,12 +58,7 @@ export const withVisibleScreenDefinition: ScreenDefinition = {
                     {type: 'label', value: '$data#$.audio.sampleRate'},
                     {type: 'label', value: '$data#$.audio.channels'},
                     {type: 'label', value: '$data#$.audio.bitrate'},
-                    {type: 'label', value: '$data#$.audio.codec'},
-                    {type: 'label', value: '$data#$.audio.artist'},
-                    {type: 'label', value: '$data#$.audio.album'},
-                    {type: 'label', value: '$data#$.audio.trackTitle'},
-                    {type: 'label', value: '$data#$.audio.genre'},
-                    {type: 'label', value: '$data#$.audio.releaseDate'},
+                    {type: 'label', value: '$data#$.audio.codec'}
                 ],
             },
             {
@@ -92,11 +72,7 @@ export const withVisibleScreenDefinition: ScreenDefinition = {
                     {type: 'label', value: '$data#$.video.duration'},
                     {type: 'label', value: '$data#$.video.width'},
                     {type: 'label', value: '$data#$.video.height'},
-                    {type: 'label', value: '$data#$.video.frameRate'},
-                    {type: 'label', value: '$data#$.video.videoCodec'},
-                    {type: 'label', value: '$data#$.video.audioCodec'},
-                    {type: 'label', value: '$data#$.video.bitrate'},
-                    {type: 'label', value: '$data#$.video.aspectRatio'},
+                    {type: 'label', value: '$data#$.video.frameRate'}
                 ],
             },
             {
@@ -113,11 +89,6 @@ export const withVisibleScreenDefinition: ScreenDefinition = {
                     {type: 'label', value: '$data#$.document.producer'},
                     {type: 'label', value: '$data#$.document.pdfVersion'},
                     {type: 'label', value: '$data#$.document.pageCount'},
-                    {type: 'label', value: '$data#$.document.wordCount'},
-                    {type: 'label', value: '$data#$.document.characterCount'},
-                    {type: 'label', value: '$data#$.document.language'},
-                    {type: 'label', value: '$data#$.document.created'},
-                    {type: 'label', value: '$data#$.document.modified'},
                     {
                         type: 'tags',
                         value: '$data#$.document.keywords',

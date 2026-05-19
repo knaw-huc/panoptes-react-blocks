@@ -39,7 +39,7 @@ const VisibleWhenScreenDemo = ()=> {
         <>
             <label style={{ display: 'block', marginBottom: '0.75rem', fontSize: '0.9rem' }}>
                 Content type:{' '}
-                <select value={index} onChange={(e) => setIndex(Number(e.target.value))}>
+                <select style={{ border: '1px solid' }} value={index} onChange={(e) => setIndex(Number(e.target.value))}>
                     {metadataSamples.map((s, i) => (
                         <option key={s.label} value={i}>{s.label}</option>
                     ))}
