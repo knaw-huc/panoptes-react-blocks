@@ -35,6 +35,9 @@ export type { ScreenProviderProps } from './components/blocks/screen/context/Scr
 export { default as ToggleBlockRenderer } from './components/blocks/toggle';
 export type { ToggleBlock } from './components/blocks/toggle';
 
+export { default as TagsBlockRenderer } from './components/blocks/tags';
+export type { TagsBlock } from './components/blocks/tags';
+
 // Screen schema types
 export type {
     ScreenDefinition,
