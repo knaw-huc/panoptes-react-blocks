@@ -4,7 +4,7 @@ import FormElement from './FormElement';
 import styles from './FormRow.module.css';
 import type {RowDefinition} from "./schema";
 import {usePanoptes} from "@knaw-huc/panoptes-react";
-import {useScreenContext} from "./hooks";
+import {useScreenContext, useVisibility} from "./hooks";
 
 interface FormRowProps {
     row: RowDefinition;
@@ -15,19 +15,21 @@ export default function FormRow({ row, inheritedGroupId }: FormRowProps) {
     const { translateFn } = usePanoptes();
     const translate = (key: string): string => translateFn ? translateFn(key) : key;
     const { screenDefinition } = useScreenContext();
+    const isVisible = useVisibility(row.visibleWhen);
+    const displayType = row.displayType || 'row';
+    const isCollapsible = row.collapsible && displayType === 'group';
+    const [collapsed, setCollapsed] = useState(isCollapsible ? (row.defaultCollapsed ?? false) : false);
+
+    if (!isVisible) {
+        return null;
+    }
 
     const effectiveGroupId = row.groupId ?? inheritedGroupId;
-
     const groupLabelKey = row.label
         ?? (row.groupId ? `screens.${screenDefinition.id}.${row.groupId}` : undefined);
-
-    const displayType = row.displayType || 'row';
     const hasRows = row.rows && row.rows.length > 0;
     const hasColumns = row.columns && row.columns.length > 0;
     const hasElements = row.elements && row.elements.length > 0;
-
-    const isCollapsible = row.collapsible && displayType === 'group';
-    const [collapsed, setCollapsed] = useState(isCollapsible ? (row.defaultCollapsed ?? false) : false);
 
     const getRowClassName = () => {
         const classes = [styles.row];

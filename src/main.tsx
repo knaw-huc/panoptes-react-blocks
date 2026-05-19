@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {Panoptes} from "@knaw-huc/panoptes-react";
 import {
@@ -8,13 +8,47 @@ import {
     JsonBlockRenderer,
     ToggleBlockRenderer,
     type ScreenDefinition,
+    type ScreenBlockValue,
     panoptesBlocksLibrary
 } from "../lib";
 import RenderScreenBlock from "../lib/components/blocks/screen";
 import "./i18n/i18n.ts";
 import {createTranslate} from "./i18n/i18n.ts";
 import '@knaw-huc/panoptes-react/style.css';
+import {
+    audioSample,
+    documentSample,
+    imageSample,
+    videoSample,
+    withVisibleScreenDefinition
+} from "./visibleWhenScreen.ts";
 import TagsBlockRenderer from "../lib/components/blocks/tags";
+
+const metadataSamples: { label: string; value: ScreenBlockValue }[] = [
+    { label: 'Image (image/jpeg)', value: imageSample },
+    { label: 'Audio (audio/mpeg)', value: audioSample },
+    { label: 'Video (video/mp4)', value: videoSample },
+    { label: 'Document (application/pdf)', value: documentSample },
+];
+
+const VisibleWhenScreenDemo = ()=> {
+    const [index, setIndex] = useState(0);
+    const sample = metadataSamples[index].value;
+
+    return (
+        <>
+            <label style={{ display: 'block', marginBottom: '0.75rem', fontSize: '0.9rem' }}>
+                Content type:{' '}
+                <select value={index} onChange={(e) => setIndex(Number(e.target.value))}>
+                    {metadataSamples.map((s, i) => (
+                        <option key={s.label} value={i}>{s.label}</option>
+                    ))}
+                </select>
+            </label>
+            <RenderScreenBlock block={{ type: 'screen', value: sample, config: withVisibleScreenDefinition }} />
+        </>
+    );
+}
 
 const exampleScreenDefinition: ScreenDefinition = {
     id: 'bypass-item-view',
@@ -282,6 +316,10 @@ const sections: { title: string; element: React.ReactNode }[] = [
         element: (
             <RenderScreenBlock block={{ type: 'screen', value: exampleScreenData, config: exampleScreenDefinition }} />
         ),
+    },
+    {
+        title: 'ScreenBlockRenderer — VisibleWhen/selected properties',
+        element: <VisibleWhenScreenDemo />,
     }
 ];
 

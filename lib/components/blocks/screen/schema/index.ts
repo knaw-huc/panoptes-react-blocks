@@ -19,7 +19,11 @@ export type {
     SidebarNavItemDefinition,
     ScreenBlock,
     ScreenBlockValue,
+    VisibleWhen,
 } from './types';
+
+export { evaluateVisibility } from './visibility';
+export type { BindingResolver } from './visibility';
 
 export {
     isBindingExpression,
