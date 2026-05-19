@@ -1,5 +1,5 @@
 import {Suspense} from "react";
-import type {ElementDefinition} from "./schema";
+import type {ElementDefinition, RowDefinition} from "./schema";
 import {type Block, useBlock, usePanoptes} from "@knaw-huc/panoptes-react";
 import {useElementState, useScreenContext} from "./hooks";
 import GhostLine from "../../ghostline/Ghostline.tsx";
@@ -202,8 +202,18 @@ export default function FormElement({ element, groupId }: FormElementProps) {
     );
 }
 
-interface ItemTemplate {
+interface FlatItemTemplate {
     [key: string]: ElementDefinition;
+}
+
+interface RowsItemTemplate {
+    rows: RowDefinition[];
+}
+
+type ItemTemplate = FlatItemTemplate | RowsItemTemplate;
+
+function isRowsItemTemplate(template: ItemTemplate | undefined): template is RowsItemTemplate {
+    return !!template && Array.isArray((template as RowsItemTemplate).rows);
 }
 
 interface ArrayDisplayProps {
@@ -227,11 +237,56 @@ function isEmptyBindingValue(item: unknown, value: ElementDefinition['value']): 
     return true;
 }
 
-function isEmptyItem(item: unknown, itemTemplate: ItemTemplate | undefined): boolean {
-    if (itemTemplate) {
-        return Object.values(itemTemplate).every(field => isEmptyBindingValue(item, field.value));
+function collectElementsFromRows(rows: RowDefinition[]): ElementDefinition[] {
+    const result: ElementDefinition[] = [];
+    for (const row of rows) {
+        if (row.elements) result.push(...row.elements);
+        if (row.columns) {
+            for (const col of row.columns) {
+                if (col.elements) result.push(...col.elements);
+            }
+        }
+        if (row.rows) result.push(...collectElementsFromRows(row.rows));
     }
-    return item == null || String(item).trim() === '';
+    return result;
+}
+
+function isEmptyItem(item: unknown, itemTemplate: ItemTemplate | undefined): boolean {
+    if (!itemTemplate) {
+        return item == null || String(item).trim() === '';
+    }
+    const elements = isRowsItemTemplate(itemTemplate)
+        ? collectElementsFromRows(itemTemplate.rows)
+        : Object.values(itemTemplate);
+    return elements.every(field => isEmptyBindingValue(item, field.value));
+}
+
+function ItemTemplateRow({ row, groupId }: { row: RowDefinition; groupId?: string }) {
+    return (
+        <>
+            {row.rows?.map((nested, i) => (
+                <ItemTemplateRow key={`row-${i}`} row={nested} groupId={groupId} />
+            ))}
+            {row.columns?.map((col, i) => (
+                <div key={`col-${i}`} className={styles.arrayItemFields}>
+                    {col.elements?.map((el, j) => (
+                        <div key={`el-${j}`} className={styles.arrayItemField}>
+                            <FormElement element={el} groupId={groupId} />
+                        </div>
+                    ))}
+                </div>
+            ))}
+            {row.elements && row.elements.length > 0 && (
+                <div className={styles.arrayItemFields}>
+                    {row.elements.map((el, i) => (
+                        <div key={`el-${i}`} className={styles.arrayItemField}>
+                            <FormElement element={el} groupId={groupId} />
+                        </div>
+                    ))}
+                </div>
+            )}
+        </>
+    );
 }
 
 function ArrayDisplay({ value, element, groupId }: ArrayDisplayProps) {
@@ -247,18 +302,27 @@ function ArrayDisplay({ value, element, groupId }: ArrayDisplayProps) {
         : [];
 
     if (itemTemplate) {
+        const rowsTemplate = isRowsItemTemplate(itemTemplate);
         return (
             <div className={styles.arrayInput}>
                 {items.map((item, index) => (
                     <ItemDataProvider key={index} item={item as Record<string, unknown>} labelPathPrefix={arrayLabelPrefix}>
                         {!isEmptyItem(item, itemTemplate) && <div className={styles.arrayItem}>
-                            <div className={styles.arrayItemFields}>
-                                {Object.entries(itemTemplate).map(([field, config]) => (
-                                    <div className={styles.arrayItemField}>
-                                        <FormElement key={field} element={config} groupId={groupId} />
-                                    </div>
-                                ))}
-                            </div>
+                            {rowsTemplate ? (
+                                <div className={styles.arrayItemRows}>
+                                    {itemTemplate.rows.map((row, i) => (
+                                        <ItemTemplateRow key={`row-${i}`} row={row} groupId={groupId} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className={styles.arrayItemFields}>
+                                    {Object.entries(itemTemplate).map(([field, config]) => (
+                                        <div key={field} className={styles.arrayItemField}>
+                                            <FormElement element={config} groupId={groupId} />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>}
                     </ItemDataProvider>
                 ))}

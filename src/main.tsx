@@ -181,6 +181,102 @@ const exampleScreenDefinition: ScreenDefinition = {
     },
 };
 
+const manuscriptScreenDefinition: ScreenDefinition = {
+    id: 'manuscript-details',
+    label: 'Manuscript — Contents',
+    screenType: 'normal',
+    tabs: [],
+    links: [],
+    actions: [],
+    form: {
+        rows: [
+            {
+                displayType: 'group',
+                groupId: 'contents',
+                columns: [
+                    {
+                        elements: [
+                            {
+                                type: 'array',
+                                value: '$data#$.Source.ManuscriptDescription.Contents.Item',
+                                config: {
+                                    itemTemplate: {
+                                        rows: [
+                                            {
+                                                elements: [
+                                                    { type: 'label', value: "$itemData#$.Title.title['`@value']" },
+                                                    { type: 'label', value: "$itemData#$.Title.altTitle['`@value']" },
+                                                ],
+                                            },
+                                            {
+                                                elements: [
+                                                    {
+                                                        type: 'array',
+                                                        value: '$itemData#$.Author',
+                                                        config: {
+                                                            itemTemplate: {
+                                                                status: { type: 'label', value: "$itemData#$.authorStatus['`@value']" },
+                                                                author: { type: 'label', value: "$itemData#$.author['`@value']" },
+                                                            },
+                                                        },
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+};
+
+const manuscriptScreenData = {
+    Source: {
+        ManuscriptDescription: {
+            Contents: {
+                Item: [
+                    {
+                        locusFrom: { '@value': '1r' },
+                        locusTo: { '@value': '3v' },
+                        Title: {
+                            title: { '@value': 'De vita beata' },
+                            altTitle: { '@value': 'On the Happy Life' },
+                        },
+                        Author: [
+                            {
+                                authorStatus: { '@value': 'attributed' },
+                                author: { '@value': 'Seneca' },
+                            },
+                            {
+                                authorStatus: { '@value': 'translator' },
+                                author: { '@value': 'Anonymous' },
+                            },
+                        ],
+                    },
+                    {
+                        locusFrom: { '@value': '4r' },
+                        locusTo: { '@value': '12v' },
+                        Title: {
+                            title: { '@value': 'Epistulae morales' },
+                            altTitle: { '@value': 'Moral Letters' },
+                        },
+                        Author: [
+                            {
+                                authorStatus: { '@value': 'certain' },
+                                author: { '@value': 'Seneca' },
+                            },
+                        ],
+                    },
+                ],
+            },
+        },
+    },
+};
+
 const exampleScreenData = {
     title: 'Beeldenkunst en literatuur',
     repository: 'IISG Digital Collections',
@@ -281,6 +377,12 @@ const sections: { title: string; element: React.ReactNode }[] = [
         title: 'ScreenBlockRenderer',
         element: (
             <RenderScreenBlock block={{ type: 'screen', value: exampleScreenData, config: exampleScreenDefinition }} />
+        ),
+    },
+    {
+        title: 'ScreenBlockRenderer — array itemTemplate with rows (nested array on its own row)',
+        element: (
+            <RenderScreenBlock block={{ type: 'screen', value: manuscriptScreenData, config: manuscriptScreenDefinition }} />
         ),
     }
 ];
