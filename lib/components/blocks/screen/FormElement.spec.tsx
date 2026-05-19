@@ -167,6 +167,48 @@ describe('FormElement — ArrayDisplay with itemTemplate', () => {
         expect(screen.getByDisplayValue('Second')).toBeInTheDocument();
     });
 
+    it('renders a rows-based itemTemplate with elements grouped per row', () => {
+        const titleEl: ElementDefinition = { type: 'label', value: '$itemData#$.title' };
+        const locusEl: ElementDefinition = { type: 'label', value: '$itemData#$.locusFrom' };
+        renderElement(
+            {
+                type: 'array',
+                value: '$data#$.items',
+                config: {
+                    itemTemplate: {
+                        rows: [
+                            { elements: [titleEl] },
+                            { elements: [locusEl] },
+                        ],
+                    },
+                },
+            },
+            data,
+        );
+        expect(screen.getByDisplayValue('First')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Second')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('1r')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('4r')).toBeInTheDocument();
+    });
+
+    it('treats a rows-based itemTemplate item as empty when all bound fields are empty', () => {
+        const { container } = renderElement(
+            {
+                type: 'array',
+                value: '$data#$.items',
+                config: {
+                    itemTemplate: {
+                        rows: [
+                            { elements: [{ type: 'label', value: '$itemData#$.missing' }] },
+                        ],
+                    },
+                },
+            },
+            data,
+        );
+        expect(container.querySelector('input')).toBeNull();
+    });
+
     it('builds itemTemplate field auto label keys from groupId + array path + field path', () => {
         const nameField: ElementDefinition = { type: 'label', value: '$itemData#$.name' };
         const roleField: ElementDefinition = { type: 'label', value: '$itemData#$.role' };
