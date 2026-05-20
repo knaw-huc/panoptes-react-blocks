@@ -250,8 +250,47 @@ Actions are meant to be simple API operations, executed after action button clic
 | `elements` | `ElementDefinition[]` | Direct child elements (mutually exclusive with `columns`/`rows`) |
 | `columns` | `ColumnDefinition[]` | Multi-column layout; each column holds its own elements |
 | `rows` | `RowDefinition[]` | Nested rows (recursive) |
+| `visibleWhen` | `VisibleWhen` | When present, the row is rendered only if the predicate matches — see [Conditional visibility](#conditional-visibility) |
 
 Row content is resolved in order of priority: nested `rows` → `columns` → `elements`.
+
+#### ColumnDefinition
+
+| Field | Type | Description |
+|---|---|---|
+| `elements` | `ElementDefinition[]` | Child elements rendered in this column |
+
+#### Conditional visibility
+
+`RowDefinition` accepts an optional `visibleWhen` predicate. The bound value is resolved using the standard [binding](#bindings) syntax and compared against one of the matchers below. When the predicate evaluates to false the row is omitted entirely from the rendered output.
+
+**VisibleWhen**
+
+| Field | Type | Description |
+|---|---|---|
+| `binding` | `string` | Binding expression resolved against the screen data (e.g. `$data#$.contentType`) |
+| `equals` | `unknown` | Match when the resolved value is strictly equal to the given value |
+| `startsWith` | `string` | Match when the resolved value is a string that starts with the given prefix |
+| `oneOf` | `unknown[]` | Match when the resolved value is one of the values in the list |
+| `matches` | `string` | Match when the resolved value is a string matching the given regular expression |
+| `exists` | `boolean` | When `true`, match when the resolved value is defined (not `undefined`/`null`); when `false`, match when absent |
+
+Example — show a group of fields only for image content types:
+
+```jsonc
+{
+  "displayType": "group",
+  "groupId": "metadata-image",
+  "visibleWhen": {
+    "binding": "$data#$.contentType",
+    "startsWith": "image/"
+  },
+  "elements": [
+    { "type": "label", "value": "$data#$.image.width" },
+    { "type": "label", "value": "$data#$.image.height" }
+  ]
+}
+```
 
 #### ElementDefinition
 
