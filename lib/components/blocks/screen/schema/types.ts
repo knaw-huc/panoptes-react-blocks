@@ -90,9 +90,19 @@ export interface RowDefinition {
     groupId?: string;
     collapsible?: boolean;
     defaultCollapsed?: boolean;
+    visibleWhen?: VisibleWhen;
     elements?: ElementDefinition[];
     columns?: ColumnDefinition[];
     rows?: RowDefinition[];
+}
+
+export interface VisibleWhen {
+    binding: string;
+    equals?: unknown;
+    startsWith?: string;
+    oneOf?: unknown[];
+    matches?: string;
+    exists?: boolean;
 }
 
 export type DisplayType = 'header' | 'group' | 'footer' | 'row';
