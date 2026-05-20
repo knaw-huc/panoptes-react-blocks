@@ -1,5 +1,6 @@
 import type {ScreenDefinition, ScreenBlockValue} from "../lib";
 
+// Took a look at Tika - we might not use everything but hey, it's a test/demo case
 const CONTENT_TYPES = [
     'application/pdf',
     'application/msword',
