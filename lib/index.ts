@@ -1,5 +1,6 @@
 import React from "react";
 import type {Block} from "@knaw-huc/panoptes-react";
+import ActionBlockRenderer from './components/blocks/screen/ScreenAction.tsx';
 import ExternalLinkBlockRenderer from './components/blocks/external-link';
 import JsonBlockRenderer from './components/blocks/json';
 import LabelBlockRenderer from './components/blocks/label';
@@ -9,6 +10,9 @@ import MarkdownBlockRenderer from './components/blocks/markdown';
 import ScreenBlockRenderer from './components/blocks/screen';
 import ToggleBlockRenderer from './components/blocks/toggle';
 import TagsBlockRenderer from "./components/blocks/tags";
+
+export { default as ActionBlockRenderer } from './components/blocks/screen/ScreenAction.tsx';
+export type { ActionBlock } from './components/blocks/screen/ScreenAction.tsx';
 
 export { default as ExternalLinkBlockRenderer } from './components/blocks/external-link';
 export type { ExternalLinkBlock } from './components/blocks/external-link';
@@ -31,6 +35,9 @@ export type { MarkDownBlock } from './components/blocks/markdown';
 export { default as ScreenBlockRenderer } from './components/blocks/screen';
 export { ScreenProvider } from './components/blocks/screen/context/ScreenContext';
 export type { ScreenProviderProps } from './components/blocks/screen/context/ScreenContext';
+export { default as useScreenContext } from './components/blocks/screen/hooks/useScreenContext';
+export { useActionContext } from './components/blocks/screen/context/ActionContext';
+export type { ActionContextValue } from './components/blocks/screen/context/ActionContext';
 
 export { default as ToggleBlockRenderer } from './components/blocks/toggle';
 export type { ToggleBlock } from './components/blocks/toggle';
@@ -73,6 +80,7 @@ export {
 export { default as GhostLine } from './components/ghostline/Ghostline';
 
 export const panoptesBlocksLibrary = new Map([
+    ['action', ActionBlockRenderer],
     ['external-link', ExternalLinkBlockRenderer],
     ['json', JsonBlockRenderer],
     ['label', LabelBlockRenderer],

@@ -1,4 +1,4 @@
-import type {Block} from "@knaw-huc/panoptes-react";
+import type { Block } from "@knaw-huc/panoptes-react";
 
 export interface ScreenDefinition {
     id: string;
@@ -63,7 +63,7 @@ export interface ActionDefinition {
     label?: string;
     activate: ActivationType;
     confirmation: ConfirmationDefinition;
-    operation: OperationDefinition;
+    block: Block;
 }
 
 export type ActivationType = 'always' | 'onDirty' | 'onValid' | 'onDirtyAndValid';
