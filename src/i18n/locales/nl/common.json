@@ -31,6 +31,7 @@
   "screens.bypass-item-view.tabs.file-history": "Bestandsgeschiedenis",
   "screens.bypass-item-view.tabs.metadata": "Metadata",
   "screens.bypass-item-view.tabs.related-files": "Gerelateerde bestanden",
+
   "screens.bypass-item-view.actions.save-changes": "Opslaan",
   "screens.bypass-item-view.actions.revert": "Herstel",
   "screens.bypass-item-view.actions.download": "Downloaden",

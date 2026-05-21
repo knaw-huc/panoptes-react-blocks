@@ -2,7 +2,6 @@ export type {
     ScreenDefinition,
     ScreenType,
     TabDefinition,
-    OperationListItem,
     OperationDefinition,
     LinkDefinition,
     ActionDefinition,
