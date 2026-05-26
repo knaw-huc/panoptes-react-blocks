@@ -208,17 +208,19 @@ Links are intended to be 'follow-up' operations after fetching data. For example
 | `operation` | `OperationDefinition` | no | API operation to execute on click |
 | `href` | `string` | no | URL to navigate to on click |
 
-#### ActionDefinition (not used yet)
+#### ActionDefinition
 
-Actions are meant to be simple API operations, executed after action button clicks.
+Each action wraps a child `block` (typically a button) that renders the action's UI. The wrapping `ScreenAction` renderer owns the execution state and confirmation flow; the child block triggers it by calling `execute(fn)` from the [ActionContext](#actioncontext).
 
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `id` | `string` | yes | Unique action identifier |
-| `label` | `string` | no | Button label; omit to use the autokey `screens.{screenId}.actions.{actionId}` |
-| `activate` | `"always" \| "onDirty" \| "onValid" \| "onDirtyAndValid"` | yes | When the button is enabled |
+| `label` | `string` | no | Action label exposed via `ActionContext`; omit to use the autokey `screens.{screenId}.actions.{actionId}` |
+| `activate` | `"always" \| "onDirty" \| "onValid" \| "onDirtyAndValid"` | yes | When the action should be enabled |
 | `confirmation` | `ConfirmationDefinition` | yes | Confirmation dialog settings |
-| `operation` | `OperationDefinition` | yes | API operation to call on confirm |
+| `block` | `Block` | yes | Child block rendered inside the action; it reads `ActionContext` to render its UI and invoke `execute` |
+
+Please note that the block contains a value property. In the context of actions, this is not used but it might prove useful in the future, for selecting an additional value.
 
 **ConfirmationDefinition**
 
@@ -229,6 +231,31 @@ Actions are meant to be simple API operations, executed after action button clic
 | `labels.message` | `string` | Dialog message; omit to use the autokey `screens.{screenId}.actions.{actionId}.message` |
 | `labels.ok` | `string` | Confirm button label; omit to use the autokey `screens.{screenId}.actions.{actionId}.ok` |
 | `labels.cancel` | `string` | Cancel button label; omit to use the autokey `screens.{screenId}.actions.{actionId}.cancel` |
+
+**ActionContext**
+
+The action's child `block` is rendered inside an `ActionContext` provider. A custom block can consume it via the `useActionContext` hook to render its UI and trigger the action:
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | The action's id |
+| `label` | `string` | Resolved label (translated, or derived from the autokey) |
+| `isEnabled` | `boolean` | `false` while the action is executing |
+| `isExecuting` | `boolean` | `true` between `execute` being called and the returned promise settling |
+| `execute` | `(fn: () => Promise<void>) => void` | Runs `fn`; if `confirmation.askConfirmation === 'always'`, the confirmation dialog is shown first and `fn` runs on confirm |
+
+```tsx
+import { useActionContext } from '@knaw-huc/panoptes-react-blocks';
+
+function SaveButton() {
+    const { label, isEnabled, execute } = useActionContext();
+    return (
+        <button disabled={!isEnabled} onClick={() => execute(async () => { /* call API */ })}>
+            {label}
+        </button>
+    );
+}
+```
 
 #### FormDefinition and rows
 
