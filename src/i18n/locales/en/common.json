@@ -31,6 +31,7 @@
   "screens.bypass-item-view.tabs.file-history": "File history",
   "screens.bypass-item-view.tabs.metadata": "Metadata",
   "screens.bypass-item-view.tabs.related-files": "Related files",
+
   "screens.bypass-item-view.actions.save-changes": "Save",
   "screens.bypass-item-view.actions.revert": "Revert",
   "screens.bypass-item-view.actions.download": "Download",
@@ -156,5 +157,9 @@
   "screens.metadata-properties.metadata-document.document.pageCount": "Pagecount",
   "screens.metadata-properties.metadata-document.document.pageCount.info": "",
   "screens.metadata-properties.metadata-document.document.keywords": "Keywords",
-  "screens.metadata-properties.metadata-document.document.keywords.info": ""
+  "screens.metadata-properties.metadata-document.document.keywords.info": "",
+
+  "screens.bypass-item-view.related-files": "Related files",
+  "screens.bypass-item-view.related-files.relatedItems": "Related items",
+  "screens.bypass-item-view.related-files.relatedItems.info": ""
 }

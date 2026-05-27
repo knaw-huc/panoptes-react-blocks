@@ -36,14 +36,6 @@ export type ScreenType = 'normal';
 export interface TabDefinition {
     id: string;
     label?: string;
-    operation?: OperationDefinition;
-    operationList?: OperationListItem[];
-}
-
-export interface OperationListItem {
-    id: string;
-    label?: string;
-    operation: OperationDefinition;
 }
 
 export interface OperationDefinition {
@@ -91,6 +83,7 @@ export interface RowDefinition {
     collapsible?: boolean;
     defaultCollapsed?: boolean;
     visibleWhen?: VisibleWhen;
+    tabId?: string | string[];
     elements?: ElementDefinition[];
     columns?: ColumnDefinition[];
     rows?: RowDefinition[];

@@ -55,18 +55,10 @@ const exampleScreenDefinition: ScreenDefinition = {
     label: 'PAPA Amsterdam ZUID Collection',
     screenType: 'normal',
     tabs: [
-        {
-            id: 'file'
-        },
-        {
-            id: 'file-history'
-        },
-        {
-            id: 'metadata'
-        },
-        {
-            id: 'related-files'
-        }
+        { id: 'file' },
+        { id: 'file-history' },
+        { id: 'metadata' },
+        { id: 'related-files' },
     ],
     links: [],
     actions: [
@@ -131,17 +123,28 @@ const exampleScreenDefinition: ScreenDefinition = {
             {
                 displayType: 'group',
                 groupId: 'file-information',
+                tabId: 'file',
                 elements: [
                     { type: 'label', value: '$data#$.title' },
                     { type: 'label', value: '$data#$.repository' },
                     { type: 'label', value: '$data#$.accessionDate' },
-                    { type: 'list', value: '$data#$.relatedItems' },
-
                 ]
             },
             {
                 displayType: 'group',
+                groupId: 'technical-information',
+                tabId: ['file', 'file-history'],
+                elements: [
+                    { type: 'external-link', value: '$data#$.sourceOfFile' },
+                    { type: 'label', value: '$data#$.inception' },
+                    { type: 'label', value: '$data#$.mediaType' },
+                    { type: 'label', value: '$data#$.checksum' },
+                ],
+            },
+            {
+                displayType: 'group',
                 groupId: 'rights-and-access',
+                tabId: 'metadata',
                 collapsible: true,
                 defaultCollapsed: false,
                 elements: [
@@ -154,6 +157,7 @@ const exampleScreenDefinition: ScreenDefinition = {
             {
                 displayType: 'group',
                 groupId: 'geographic-information',
+                tabId: 'metadata',
                 rows: [
                     {
                         columns: [
@@ -187,17 +191,8 @@ const exampleScreenDefinition: ScreenDefinition = {
             },
             {
                 displayType: 'group',
-                groupId: 'technical-information',
-                elements: [
-                    { type: 'external-link', value: '$data#$.sourceOfFile' },
-                    { type: 'label', value: '$data#$.inception' },
-                    { type: 'label', value: '$data#$.mediaType' },
-                    { type: 'label', value: '$data#$.checksum' },
-                ],
-            },
-            {
-                displayType: 'group',
                 groupId: 'contributors',
+                tabId: 'metadata',
                 elements: [
                     {
                         type: 'array',
@@ -210,7 +205,15 @@ const exampleScreenDefinition: ScreenDefinition = {
                         },
                     },
                 ],
-            }
+            },
+            {
+                displayType: 'group',
+                groupId: 'related-files',
+                tabId: 'related-files',
+                elements: [
+                    { type: 'list', value: '$data#$.relatedItems' },
+                ],
+            },
         ],
     },
 };
