@@ -9,7 +9,8 @@ import {
     ToggleBlockRenderer,
     type ScreenDefinition,
     type ScreenBlockValue,
-    panoptesBlocksLibrary
+    panoptesBlocksLibrary,
+    useActionContext,
 } from "../lib";
 import RenderScreenBlock from "../lib/components/blocks/screen";
 import "./i18n/i18n.ts";
@@ -23,6 +24,42 @@ import {
     withVisibleScreenDefinition
 } from "./visibleWhenScreen.ts";
 import TagsBlockRenderer from "../lib/components/blocks/tags";
+import type { Block } from "@knaw-huc/panoptes-react";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function DemoActionButton1(_: { block: Block }) {
+    const { label, isEnabled, isExecuting, execute } = useActionContext();
+    return (
+        <button style={{color: '#fff', background: '#185FA5', padding: '7px 16px'}}
+            disabled={!isEnabled}
+            onClick={() => execute(async () => {
+                console.log('Demo Action 1 executed:', label);
+            })}
+        >
+            {isExecuting ? '...' : label}
+        </button>
+    );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function DemoActionButton2(_: { block: Block }) {
+    const { label, isEnabled, isExecuting, execute } = useActionContext();
+    return (
+        <button
+            style={{color: '#fff', background: '#185FA5', padding: '7px 16px'}}
+            disabled={!isEnabled}
+            onClick={() => execute(async () => {
+                console.log('Demo Action 2 executed:', label);
+            })}
+        >
+            {isExecuting ? '...' : label}
+        </button>
+    );
+}
+
+const demoBlocksLibrary = new Map(panoptesBlocksLibrary);
+demoBlocksLibrary.set('demo-action-button-1', DemoActionButton1);
+demoBlocksLibrary.set('demo-action-button-2', DemoActionButton2);
 
 const metadataSamples: { label: string; value: ScreenBlockValue }[] = [
     { label: 'Image (image/jpeg)', value: imageSample },
@@ -64,58 +101,15 @@ const exampleScreenDefinition: ScreenDefinition = {
     actions: [
         {
             id: 'save-changes',
-            confirmation: {
-                askConfirmation: 'never'
-            },
             activate: 'always',
-            operation: {
-                operationId: 'saveItemChanges',
-                parameters: { }
-            }
+            confirmation: { askConfirmation: 'never' },
+            block: { type: 'demo-action-button-1', value: null },
         },
         {
             id: 'revert',
-            confirmation: {
-                askConfirmation: 'never'
-            },
             activate: 'always',
-            operation: {
-                operationId: 'revertChanges',
-                parameters: {}
-            }
-        },
-        {
-            id: 'download',
-            confirmation: {
-                askConfirmation: 'never'
-            },
-            activate: 'always',
-            operation: {
-                operationId: 'downloadItem',
-                parameters: {}
-            },
-        },
-        {
-            id: 'export-metadata',
-            confirmation: {
-                askConfirmation: 'never'
-            },
-            activate: 'always',
-            operation: {
-                operationId: 'exportMetadata',
-                parameters: {}
-            }
-        },
-        {
-            id: 'share',
-            confirmation: {
-                askConfirmation: 'never'
-            },
-            activate: 'always',
-            operation: {
-                operationId: 'share',
-                parameters: {}
-            }
+            confirmation: { askConfirmation: 'always' },
+            block: { type: 'demo-action-button-2', value: null },
         }
     ],
     form: {
@@ -431,7 +425,7 @@ const sections: { title: string; element: React.ReactNode }[] = [
 function App() {
     return (
         <Panoptes configuration={{
-            blocks: panoptesBlocksLibrary,
+            blocks: demoBlocksLibrary,
             translateFn: createTranslate()
         }}>
             <div style={{ fontFamily: 'sans-serif', margin: '2rem auto', padding: '0 1rem' }}>

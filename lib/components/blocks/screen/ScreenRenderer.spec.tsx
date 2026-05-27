@@ -7,6 +7,7 @@ import type { ScreenDefinition } from './schema';
 vi.mock('@knaw-huc/panoptes-react', () => ({
     usePanoptes: vi.fn(() => ({ translateFn: (key: string) => key })),
     useBlock: vi.fn(() => null),
+    BlockLoader: () => <div data-testid="mock-block" />,
 }));
 
 const baseScreen: ScreenDefinition = {
@@ -91,13 +92,13 @@ describe('ScreenRenderer', () => {
                     label: 'Save',
                     activate: 'always',
                     confirmation: { askConfirmation: 'never' },
-                    operation: { operationId: 'save-op', parameters: {} },
+                    block: { type: 'action-button', value: null },
                 },
             ],
         };
         renderWithScreen(screenDef);
         expect(document.querySelector('footer')).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+        expect(screen.getByTestId('mock-block')).toBeInTheDocument();
     });
 
     it('does not render a sidebar when sidebar is absent', () => {

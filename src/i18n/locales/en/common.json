@@ -34,6 +34,10 @@
 
   "screens.bypass-item-view.actions.save-changes": "Save",
   "screens.bypass-item-view.actions.revert": "Revert",
+  "screens.bypass-item-view.actions.revert.title": "Confirm action",
+  "screens.bypass-item-view.actions.revert.message": "Do you want to revert the changes?",
+  "screens.bypass-item-view.actions.revert.cancel": "Cancel",
+  "screens.bypass-item-view.actions.revert.ok": "OK",
   "screens.bypass-item-view.actions.download": "Download",
   "screens.bypass-item-view.actions.export-metadata": "Export Metadata",
   "screens.bypass-item-view.actions.share": "Share",
