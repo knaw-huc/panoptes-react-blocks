@@ -52,7 +52,6 @@ export type {
     ScreenBlock,
     ScreenBlockValue,
     TabDefinition,
-    OperationListItem,
     OperationDefinition,
     LinkDefinition,
     ActionDefinition,

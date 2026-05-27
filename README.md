@@ -179,18 +179,14 @@ A `ScreenBlock` received from the API has the following shape:
 | `form` | `FormDefinition` | yes      | Content form (rows of elements)                                                                              |
 | `sidebar` | `SidebarDefinition` | no       | Icon sidebar rendered to the left of the form                                                                |
 
-#### TabDefinition (not used yet)
+#### TabDefinition
 
-Tabs are .... tabs, and meant for executing an operation after clicking a tab.
+Tabs filter which form rows are visible. A row is shown on a tab when its `tabId` matches the active tab; rows without a `tabId` are visible on every tab. The tab bar is only rendered when there is more than one tab.
 
 | Field | Type | Required | Description                                                  |
 |---|---|---|--------------------------------------------------------------|
-| `id` | `string` | yes | Unique tab identifier                                        |
+| `id` | `string` | yes | Unique tab identifier; referenced from `RowDefinition.tabId` |
 | `label` | `string` | no | Tab label; omit to use the autokey `screens.{screenId}.tabs.{tabId}` |
-| `operation` | `OperationDefinition` | no | API operation to call when the tab is selected |
-| `operationList` | `OperationListItem[]` | no | Sub-navigation items shown beneath the active tab            |
-
-Each `OperationListItem` has an `id`, an optional `label` (autokey: `screens.{screenId}.tabs.{tabId}.{itemId}`), and an `operation`.
 
 #### LinkDefinition (not used yet)
 
@@ -278,6 +274,7 @@ function SaveButton() {
 | `columns` | `ColumnDefinition[]` | Multi-column layout; each column holds its own elements |
 | `rows` | `RowDefinition[]` | Nested rows (recursive) |
 | `visibleWhen` | `VisibleWhen` | When present, the row is rendered only if the predicate matches — see [Conditional visibility](#conditional-visibility) |
+| `tabId` | `string \| string[]` | Restricts the row to the given tab(s); rows without a `tabId` are visible on every tab. Only meaningful when the screen defines `tabs` |
 
 Row content is resolved in order of priority: nested `rows` → `columns` → `elements`.
 
@@ -399,7 +396,6 @@ All `label` (and `infoLabel`) fields are optional. When omitted, a translation k
 | Element label | `screens.{screenId}.{groupId}.{field}` | `screens.journal-detail.metadata.title` |
 | Element info label | `screens.{screenId}.{groupId}.{field}.info` | `screens.journal-detail.metadata.title.info` |
 | Tab label | `screens.{screenId}.tabs.{tabId}` | `screens.journal-detail.tabs.general` |
-| Tab operation list item | `screens.{screenId}.tabs.{tabId}.{itemId}` | `screens.journal-detail.tabs.general.volume-1` |
 | Sidebar nav item | `screens.{screenId}.sidebar.{sectionId}.{itemId}` | `screens.journal-detail.sidebar.main.home` |
 | Action button | `screens.{screenId}.actions.{actionId}` | `screens.journal-detail.actions.save` |
 | Action confirmation title | `screens.{screenId}.actions.{actionId}.title` | `screens.journal-detail.actions.save.title` |

@@ -27,6 +27,11 @@
   "panoptes.noValue": "No value",
   "panoptes.mainSiteNavigation": "Main site navigation",
 
+  "screens.bypass-item-view.tabs.file": "File",
+  "screens.bypass-item-view.tabs.file-history": "File history",
+  "screens.bypass-item-view.tabs.metadata": "Metadata",
+  "screens.bypass-item-view.tabs.related-files": "Related files",
+
   "screens.bypass-item-view.actions.save-changes": "Save",
   "screens.bypass-item-view.actions.revert": "Revert",
   "screens.bypass-item-view.actions.revert.title": "Confirm action",
@@ -36,11 +41,6 @@
   "screens.bypass-item-view.actions.download": "Download",
   "screens.bypass-item-view.actions.export-metadata": "Export Metadata",
   "screens.bypass-item-view.actions.share": "Share",
-
-  "screens.bypass-item-view.tabs.file": "File",
-  "screens.bypass-item-view.tabs.file-history": "File history",
-  "screens.bypass-item-view.tabs.metadata": "Metadata",
-  "screens.bypass-item-view.tabs.related-files": "Related files",
 
   "screens.bypass-item-view.file-information": "File information",
   "screens.bypass-item-view.file-information.title": "Title",
@@ -161,5 +161,9 @@
   "screens.metadata-properties.metadata-document.document.pageCount": "Pagecount",
   "screens.metadata-properties.metadata-document.document.pageCount.info": "",
   "screens.metadata-properties.metadata-document.document.keywords": "Keywords",
-  "screens.metadata-properties.metadata-document.document.keywords.info": ""
+  "screens.metadata-properties.metadata-document.document.keywords.info": "",
+
+  "screens.bypass-item-view.related-files": "Related files",
+  "screens.bypass-item-view.related-files.relatedItems": "Related items",
+  "screens.bypass-item-view.related-files.relatedItems.info": ""
 }
