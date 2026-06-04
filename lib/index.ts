@@ -10,6 +10,7 @@ import MarkdownBlockRenderer from './components/blocks/markdown';
 import ScreenBlockRenderer from './components/blocks/screen';
 import ToggleBlockRenderer from './components/blocks/toggle';
 import TagsBlockRenderer from "./components/blocks/tags";
+import FilePreviewBlockRenderer from "./components/blocks/file-preview";
 
 export { default as ActionBlockRenderer } from './components/blocks/screen/ScreenAction.tsx';
 export type { ActionBlock } from './components/blocks/screen/ScreenAction.tsx';
@@ -44,6 +45,9 @@ export type { ToggleBlock } from './components/blocks/toggle';
 
 export { default as TagsBlockRenderer } from './components/blocks/tags';
 export type { TagsBlock } from './components/blocks/tags';
+
+export { default as FilePreviewBlockRenderer } from './components/blocks/file-preview';
+export type { FilePreviewBlock } from './components/blocks/file-preview';
 
 // Screen schema types
 export type {
@@ -88,5 +92,6 @@ export const panoptesBlocksLibrary = new Map([
     ['markdown', MarkdownBlockRenderer],
     ['screen', ScreenBlockRenderer],
     ['toggle', ToggleBlockRenderer],
-    ['tags', TagsBlockRenderer]
+    ['tags', TagsBlockRenderer],
+    ['file-preview', FilePreviewBlockRenderer],
 ]) as Map<string, React.FC<{ block: Block }>>;

@@ -38,7 +38,7 @@
     "clean": "rm -rf coverage && rm -rf dist"
   },
   "peerDependencies": {
-    "@knaw-huc/panoptes-react": "*",
+    "@knaw-huc/panoptes-react": "file:../panoptes-react/knaw-huc-panoptes-react-0.0.6.tgz",
     "@tanstack/react-router": "*",
     "react": "19",
     "react-dom": "19"
@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
-    "@knaw-huc/panoptes-react": "^0.0.2",
+    "@knaw-huc/panoptes-react": "file:../panoptes-react/knaw-huc-panoptes-react-0.0.6.tgz",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
