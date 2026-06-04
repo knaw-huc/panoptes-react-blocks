@@ -38,7 +38,7 @@
     "clean": "rm -rf coverage && rm -rf dist"
   },
   "peerDependencies": {
-    "@knaw-huc/panoptes-react": "file:../panoptes-react/knaw-huc-panoptes-react-0.0.6.tgz",
+    "@knaw-huc/panoptes-react": "^0.0.6",
     "@tanstack/react-router": "*",
     "react": "19",
     "react-dom": "19"
