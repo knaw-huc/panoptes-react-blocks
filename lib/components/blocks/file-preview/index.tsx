@@ -1,5 +1,7 @@
 import {type Block, useResolveResource} from "@knaw-huc/panoptes-react";
 import classes from "./FilePreviewBlockRenderer.module.css";
+import {ErrorBoundary} from "react-error-boundary";
+import {Suspense} from "react";
 
 export interface FilePreviewBlockData {
     contentType: string;
@@ -11,14 +13,27 @@ export interface FilePreviewBlock extends Block {
     value: FilePreviewBlockData;
 }
 
-export default function FilePreviewBlockRenderer({block}: { block: Block }) {
+const FilePreview = ({ block }: { block: Block }) => {
     const filePreviewBlock = block as FilePreviewBlock;
+    const { data } = useResolveResource(filePreviewBlock.value.url);
 
-    const signedUrl = useResolveResource(filePreviewBlock.value.url);
-    if (signedUrl.isSuccess) {
-        return (<img className={"aspect-auto w-40 h-20 rounded-lg"} src={signedUrl.data.url}/>);
-    }
+    return (
+        <img
+            className="aspect-auto w-40 h-20 rounded-lg"
+            src={data.url}
+            alt=""
+        />
+    );
+}
 
-    return <span className={classes.empty}>—</span>;
+const Fallback = () => <span className={classes.empty}>—</span>;
 
+export default function FilePreviewBlockRenderer({ block }: { block: Block }) {
+    return (
+        <ErrorBoundary fallback={<Fallback />}>
+            <Suspense fallback={<Fallback />}>
+                <FilePreview block={block} />
+            </Suspense>
+        </ErrorBoundary>
+    );
 }
