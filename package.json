@@ -1,6 +1,6 @@
 {
   "name": "@knaw-huc/panoptes-react-blocks",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -38,7 +38,7 @@
     "clean": "rm -rf coverage && rm -rf dist"
   },
   "peerDependencies": {
-    "@knaw-huc/panoptes-react": "*",
+    "@knaw-huc/panoptes-react": ">=0.0.8",
     "@tanstack/react-router": "*",
     "react": "19",
     "react-dom": "19"
@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
-    "@knaw-huc/panoptes-react": "^0.0.2",
+    "@knaw-huc/panoptes-react": "^0.0.8",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

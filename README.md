@@ -110,6 +110,20 @@ interface MapBlock extends Block {
 }
 ```
 
+### `FilePreviewBlockRenderer`
+
+Resolves `value.url` via the Panoptes `useResolveResource` hook and renders the result as a thumbnail image. Resolving is wrapped in `Suspense` and an `ErrorBoundary`, so an em-dash placeholder is shown while loading or if resolution fails.
+
+```ts
+interface FilePreviewBlock extends Block {
+    type: 'file-preview';
+    value: {
+        contentType: string;
+        url: string; // resource URL resolved via useResolveResource
+    };
+}
+```
+
 ### `RenderJsonBlock`
 
 Renders structured JSON data driven by a JSON Schema `config`.
