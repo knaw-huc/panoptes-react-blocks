@@ -16,12 +16,10 @@ function NavItem({ item, screenId, sectionId }: { item: SidebarNavItemDefinition
 
     const className = `${styles.item}${item.active ? ` ${styles.itemActive}` : ''}`;
 
-    // TODO - use icons or something similar
     return (
-        <button type="button" className={className} title={label}>
-            X
-            <span className={styles.tooltip}>{label}</span>
-        </button>
+        <a href={item.href} className={className}>
+            {label}
+        </a>
     );
 }
 

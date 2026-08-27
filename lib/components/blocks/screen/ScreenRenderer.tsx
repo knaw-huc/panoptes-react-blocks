@@ -49,13 +49,14 @@ export default function ScreenRenderer() {
                  style={hasSidebar && screenDefinition.sidebar!.width
                      ? { '--sidebar-width': screenDefinition.sidebar!.width } as React.CSSProperties
                      : undefined}>
-                {hasSidebar && (
-                    <ScreenSidebar sidebar={screenDefinition.sidebar!} />
-                )}
 
                 <main className={styles.content}>
                     <ScreenForm />
                 </main>
+
+                {hasSidebar && (
+                    <ScreenSidebar sidebar={screenDefinition.sidebar!} />
+                )}
             </div>
 
             {/* Action buttons */}

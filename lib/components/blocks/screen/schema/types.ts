@@ -25,8 +25,8 @@ export interface SidebarSectionDefinition {
 
 export interface SidebarNavItemDefinition {
     id: string;
-    icon: string;
     label?: string;
+    href?: string;
     operation: OperationDefinition;
     active?: boolean;
 }
