@@ -51,6 +51,7 @@ export default function FormRow({ row, inheritedGroupId }: FormRowProps) {
         <fieldset
             className={getRowClassName()}
             data-group-id={row.groupId}>
+            id={`section-${row.groupId}`}>
             {/* Group label/legend */}
             {groupLabelKey && (
                 isCollapsible ? (
