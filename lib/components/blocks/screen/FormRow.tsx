@@ -50,7 +50,7 @@ export default function FormRow({ row, inheritedGroupId }: FormRowProps) {
     return (
         <fieldset
             className={getRowClassName()}
-            data-group-id={row.groupId}>
+            data-group-id={row.groupId}
             id={`section-${row.groupId}`}>
             {/* Group label/legend */}
             {groupLabelKey && (
